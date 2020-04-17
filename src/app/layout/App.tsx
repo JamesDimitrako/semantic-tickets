@@ -14,6 +14,11 @@ const App = () => {
     setSelectedTicket(tickets.filter((t) => t.id === id)[0]);
   };
 
+  const handleOpenCreateForm = () => {
+    setSelectedTicket(null);
+    setEditMode(true);
+  };
+
   useEffect(() => {
     axios.get("http://localhost:5000/api/tickets").then((response) => {
       setTickets(response.data);
@@ -22,7 +27,7 @@ const App = () => {
 
   return (
     <Fragment>
-      <NavBar />
+      <NavBar openCreateForm={handleOpenCreateForm} />
       <Container style={{ marginTop: "7em" }}>
         <TicketDashboard
           tickets={tickets}
@@ -30,6 +35,7 @@ const App = () => {
           selectedTicket={selectedTicket!}
           editMode={editMode}
           setEditMode={setEditMode}
+          setSelectedTicket={setSelectedTicket}
         />
       </Container>
     </Fragment>

@@ -11,6 +11,7 @@ interface IProps {
   selectedTicket: ITicket | null;
   editMode: boolean;
   setEditMode: (editMode: boolean) => void;
+  setSelectedTicket: (ticket: ITicket | null) => void;
 }
 
 export const TicketDashboard: React.FC<IProps> = ({
@@ -19,6 +20,7 @@ export const TicketDashboard: React.FC<IProps> = ({
   selectedTicket,
   editMode,
   setEditMode,
+  setSelectedTicket,
 }) => {
   return (
     <Grid>
@@ -27,9 +29,13 @@ export const TicketDashboard: React.FC<IProps> = ({
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedTicket && !editMode && (
-          <TicketDetails ticket={selectedTicket} setEditMode={setEditMode} />
+          <TicketDetails
+            ticket={selectedTicket}
+            setEditMode={setEditMode}
+            setSelectedTicket={setSelectedTicket}
+          />
         )}
-        {editMode && <TicketForm />}
+        {editMode && <TicketForm setEditMode={setEditMode} />}
       </Grid.Column>
     </Grid>
   );

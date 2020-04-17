@@ -5,9 +5,14 @@ import { ITicket } from "../../../app/models/ticket";
 interface IProps {
   ticket: ITicket;
   setEditMode: (editMode: boolean) => void;
+  setSelectedTicket: (ticket: ITicket | null) => void;
 }
 
-const TicketDetails: React.FC<IProps> = ({ ticket, setEditMode }) => {
+const TicketDetails: React.FC<IProps> = ({
+  ticket,
+  setEditMode,
+  setSelectedTicket,
+}) => {
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -43,7 +48,7 @@ const TicketDetails: React.FC<IProps> = ({ ticket, setEditMode }) => {
                   content="Edit"
                 />
                 <Button
-                  onClick={() => setEditMode(false)}
+                  onClick={() => setSelectedTicket(null)}
                   basic
                   color="grey"
                   content="Cancel"
