@@ -7,6 +7,11 @@ import { TicketDashboard } from "../../features/tickets/dashboard/TicketDashboar
 
 const App = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
+  const [selectedTicket, setSelectedTicket] = useState<ITicket | null>(null);
+
+  const handleSelectTicket = (id: string) => {
+    setSelectedTicket(tickets.filter((t) => t.id === id)[0]);
+  };
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/tickets").then((response) => {
@@ -18,7 +23,11 @@ const App = () => {
     <Fragment>
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <TicketDashboard tickets={tickets} />
+        <TicketDashboard
+          tickets={tickets}
+          selectTicket={handleSelectTicket}
+          selectedTicket={selectedTicket!}
+        />
       </Container>
     </Fragment>
   );

@@ -12,22 +12,22 @@ const TicketDetails: React.FC<IProps> = ({ ticket }) => {
       <Item.Group divided>
         <Item>
           <Item.Content>
-            <Item.Header as="a">title</Item.Header>
+            <Item.Header as="a">{ticket.title}</Item.Header>
             <Item.Meta>Description</Item.Meta>
 
             <Item.Description>
-              <div>description</div>
+              <div>{ticket.description}</div>
               <Label>
                 Date Created
-                <Label.Detail>dateFirst</Label.Detail>
+                <Label.Detail>{ticket.dateFirst}</Label.Detail>
               </Label>
               <Label>
                 Date Modified
-                <Label.Detail>dateModified</Label.Detail>
+                <Label.Detail>{ticket.dateModified}</Label.Detail>
               </Label>
               <Label>
                 Deadline
-                <Label.Detail>dateDeadline</Label.Detail>
+                <Label.Detail>{ticket.dateDeadline}</Label.Detail>
               </Label>
             </Item.Description>
             <Item.Extra>

@@ -7,21 +7,22 @@ import TicketForm from "../form/TicketForm";
 
 interface IProps {
   tickets: ITicket[];
+  selectTicket: (id: string) => void;
+  selectedTicket: ITicket | null;
 }
 
-export const TicketDashboard: React.FC<IProps> = ({ tickets }) => {
+export const TicketDashboard: React.FC<IProps> = ({
+  tickets,
+  selectTicket,
+  selectedTicket,
+}) => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <TicketList tickets={tickets} />
-        {/* <List>
-          {tickets.map(ticket => (
-            <List.Item key={ticket.id}>{ticket.title}</List.Item>
-          ))}
-        </List> */}
+        <TicketList tickets={tickets} selectTicket={selectTicket} />
       </Grid.Column>
       <Grid.Column width={6}>
-        <TicketDetails ticket={tickets[0]} />
+        {selectedTicket && <TicketDetails ticket={selectedTicket} />}
         <TicketForm />
       </Grid.Column>
     </Grid>
