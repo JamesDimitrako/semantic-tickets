@@ -13,7 +13,7 @@ const requests = {
 };
 
 const Tickets = {
-  list: () => requests.get("/tickets"),
+  list: (): Promise<ITicket[]> => requests.get("/tickets"),
   details: (id: string) => requests.get(`/tickets/${id}`),
   update: (ticket: ITicket) => requests.put(`/tickets/${ticket.id}`, ticket),
   create: (ticket: ITicket) => requests.post(`/tickets`, ticket),

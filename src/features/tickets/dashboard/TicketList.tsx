@@ -39,22 +39,24 @@ const TicketList: React.FC<IProps> = ({
               </Item.Description>
               <Item.Extra>
                 <Label basic content="Category" />
+
+                <Button
+                  onClick={() => selectTicket(ticket.id)}
+                  floated="right"
+                  color="teal"
+                  animated
+                >
+                  <Button.Content visible>View</Button.Content>
+                  <Button.Content hidden>
+                    <Icon name="arrow right" />
+                  </Button.Content>
+                </Button>
                 <Button
                   onClick={() => deleteTicket(ticket.id)}
-                  basic
                   floated="right"
                   color="red"
                   content="Delete"
                 />
-                <Button floated="right" color="teal" animated>
-                  <Button.Content visible>View</Button.Content>
-                  <Button.Content
-                    onClick={() => selectTicket(ticket.id)}
-                    hidden
-                  >
-                    <Icon name="arrow right" />
-                  </Button.Content>
-                </Button>
               </Item.Extra>
             </Item.Content>
           </Item>

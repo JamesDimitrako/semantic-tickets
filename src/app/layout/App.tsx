@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Container } from "semantic-ui-react";
-import axios from "axios";
 import { ITicket } from "../models/ticket";
 import { NavBar } from "../../features/nav/NavBar";
 import { TicketDashboard } from "../../features/tickets/dashboard/TicketDashboard";
+import agent from "../api/agent";
 
 const App = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
@@ -21,34 +21,38 @@ const App = () => {
   };
 
   const handleCreateTicket = (ticket: ITicket) => {
-    setTickets([...tickets, ticket]);
-    setSelectedTicket(ticket);
-    setEditMode(false);
+    agent.Tickets.create(ticket).then(() => {
+      setTickets([...tickets, ticket]);
+      setSelectedTicket(ticket);
+      setEditMode(false);
+    });
   };
 
   const handleEditTicket = (ticket: ITicket) => {
-    setTickets([...tickets.filter((t) => t.id !== ticket.id), ticket]);
-    setSelectedTicket(ticket);
-    setEditMode(false);
+    agent.Tickets.update(ticket).then(() => {
+      setTickets([...tickets.filter((t) => t.id !== ticket.id), ticket]);
+      setSelectedTicket(ticket);
+      setEditMode(false);
+    });
   };
 
   const handleDeleteTicket = (id: string) => {
-    setTickets([...tickets.filter((a) => a.id !== id)]);
+    agent.Tickets.delete(id).then(() => {
+      setTickets([...tickets.filter((a) => a.id !== id)]);
+    });
   };
 
   useEffect(() => {
-    axios
-      .get<ITicket[]>("http://localhost:5000/api/tickets")
-      .then((response) => {
-        let tickets: ITicket[] = [];
-        response.data.forEach((ticket) => {
-          ticket.dateFirst = ticket.dateFirst.split(".")[0];
-          ticket.dateModified = ticket.dateModified.split(".")[0];
-          ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
-          tickets.push(ticket);
-        });
-        setTickets(tickets);
+    agent.Tickets.list().then((response) => {
+      let tickets: ITicket[] = [];
+      response.forEach((ticket) => {
+        ticket.dateFirst = ticket.dateFirst.split(".")[0];
+        ticket.dateModified = ticket.dateModified.split(".")[0];
+        ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
+        tickets.push(ticket);
       });
+      setTickets(tickets);
+    });
   }, []);
 
   return (
