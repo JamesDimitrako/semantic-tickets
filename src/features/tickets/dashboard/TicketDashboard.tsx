@@ -9,12 +9,16 @@ interface IProps {
   tickets: ITicket[];
   selectTicket: (id: string) => void;
   selectedTicket: ITicket | null;
+  editMode: boolean;
+  setEditMode: (editMode: boolean) => void;
 }
 
 export const TicketDashboard: React.FC<IProps> = ({
   tickets,
   selectTicket,
   selectedTicket,
+  editMode,
+  setEditMode,
 }) => {
   return (
     <Grid>
@@ -22,8 +26,10 @@ export const TicketDashboard: React.FC<IProps> = ({
         <TicketList tickets={tickets} selectTicket={selectTicket} />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedTicket && <TicketDetails ticket={selectedTicket} />}
-        <TicketForm />
+        {selectedTicket && !editMode && (
+          <TicketDetails ticket={selectedTicket} setEditMode={setEditMode} />
+        )}
+        {editMode && <TicketForm />}
       </Grid.Column>
     </Grid>
   );

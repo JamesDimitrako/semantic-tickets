@@ -8,6 +8,7 @@ import { TicketDashboard } from "../../features/tickets/dashboard/TicketDashboar
 const App = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<ITicket | null>(null);
+  const [editMode, setEditMode] = useState(false);
 
   const handleSelectTicket = (id: string) => {
     setSelectedTicket(tickets.filter((t) => t.id === id)[0]);
@@ -27,6 +28,8 @@ const App = () => {
           tickets={tickets}
           selectTicket={handleSelectTicket}
           selectedTicket={selectedTicket!}
+          editMode={editMode}
+          setEditMode={setEditMode}
         />
       </Container>
     </Fragment>

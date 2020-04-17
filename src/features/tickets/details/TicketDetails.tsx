@@ -1,12 +1,13 @@
 import React from "react";
-import { Item, Segment, Label, Button, Icon } from "semantic-ui-react";
+import { Item, Segment, Label, Button } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 
 interface IProps {
   ticket: ITicket;
+  setEditMode: (editMode: boolean) => void;
 }
 
-const TicketDetails: React.FC<IProps> = ({ ticket }) => {
+const TicketDetails: React.FC<IProps> = ({ ticket, setEditMode }) => {
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -35,8 +36,18 @@ const TicketDetails: React.FC<IProps> = ({ ticket }) => {
             </Item.Extra>
             <Item.Extra>
               <Button.Group widths={2}>
-                <Button basic color="teal" content="Edit" />
-                <Button basic color="grey" content="Cancel" />
+                <Button
+                  onClick={() => setEditMode(true)}
+                  basic
+                  color="teal"
+                  content="Edit"
+                />
+                <Button
+                  onClick={() => setEditMode(false)}
+                  basic
+                  color="grey"
+                  content="Cancel"
+                />
               </Button.Group>
             </Item.Extra>
           </Item.Content>
