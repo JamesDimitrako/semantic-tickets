@@ -1,15 +1,20 @@
 import React, { useState, FormEvent } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
+import { v4 as uuid } from "uuid";
 
 interface IProps {
   setEditMode: (editMode: boolean) => void;
   ticket: ITicket;
+  createTicket: (ticket: ITicket) => void;
+  editTicket: (ticket: ITicket) => void;
 }
 
 const TicketForm: React.FC<IProps> = ({
   setEditMode,
   ticket: initialFormState,
+  createTicket,
+  editTicket,
 }) => {
   const initializeForm = () => {
     if (initialFormState) {
@@ -31,7 +36,15 @@ const TicketForm: React.FC<IProps> = ({
   const [ticket, setTicket] = useState<ITicket>(initializeForm);
 
   const handleSubmit = () => {
-    console.log(ticket);
+    if (ticket.id.length === 0) {
+      let newTicket = {
+        ...ticket,
+        id: uuid(),
+      };
+      createTicket(newTicket);
+    } else {
+      editTicket(ticket);
+    }
   };
 
   const handleInputChange = (

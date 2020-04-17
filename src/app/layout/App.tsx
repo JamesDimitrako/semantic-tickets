@@ -12,6 +12,7 @@ const App = () => {
 
   const handleSelectTicket = (id: string) => {
     setSelectedTicket(tickets.filter((t) => t.id === id)[0]);
+    setEditMode(false);
   };
 
   const handleOpenCreateForm = () => {
@@ -19,10 +20,31 @@ const App = () => {
     setEditMode(true);
   };
 
+  const handleCreateTicket = (ticket: ITicket) => {
+    setTickets([...tickets, ticket]);
+    setSelectedTicket(ticket);
+    setEditMode(false);
+  };
+
+  const handleEditTicket = (ticket: ITicket) => {
+    setTickets([...tickets.filter((t) => t.id !== ticket.id), ticket]);
+    setSelectedTicket(ticket);
+    setEditMode(false);
+  };
+
   useEffect(() => {
-    axios.get("http://localhost:5000/api/tickets").then((response) => {
-      setTickets(response.data);
-    });
+    axios
+      .get<ITicket[]>("http://localhost:5000/api/tickets")
+      .then((response) => {
+        let tickets: ITicket[] = [];
+        response.data.forEach((ticket) => {
+          ticket.dateFirst = ticket.dateFirst.split(".")[0];
+          ticket.dateModified = ticket.dateModified.split(".")[0];
+          ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
+          tickets.push(ticket);
+        });
+        setTickets(tickets);
+      });
   }, []);
 
   return (
@@ -36,6 +58,8 @@ const App = () => {
           editMode={editMode}
           setEditMode={setEditMode}
           setSelectedTicket={setSelectedTicket}
+          createTicket={handleCreateTicket}
+          editTicket={handleEditTicket}
         />
       </Container>
     </Fragment>
