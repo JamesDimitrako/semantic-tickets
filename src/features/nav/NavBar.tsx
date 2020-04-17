@@ -6,11 +6,15 @@ export const NavBar = () => {
     <Menu fixed="top" inverted>
       <Container>
         <Menu.Item header>
-            <img src='./assets/logo.png' alt="logo" style={{marginRight: '10px'}}/>
+          <img
+            src="./assets/logo.png"
+            alt="logo"
+            style={{ marginRight: "10px" }}
+          />
         </Menu.Item>
-        <Menu.Item name="Activities" />
-        <Menu.Item >
-            <Button positive content='Create Activity' />
+        <Menu.Item name="Tickets" />
+        <Menu.Item>
+          <Button color="teal" content="Create Ticket" />
         </Menu.Item>
       </Container>
     </Menu>

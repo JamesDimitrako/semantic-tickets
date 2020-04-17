@@ -1,20 +1,22 @@
 import React from "react";
-import { Grid, List } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
+import TicketList from "./TicketList";
 
 interface IProps {
-    tickets: ITicket[]
+  tickets: ITicket[];
 }
 
-export const TicketDashboard: React.FC<IProps> = ({tickets}) => {
+export const TicketDashboard: React.FC<IProps> = ({ tickets }) => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <List>
+        <TicketList />
+        {/* <List>
           {tickets.map(ticket => (
             <List.Item key={ticket.id}>{ticket.title}</List.Item>
           ))}
-        </List>
+        </List> */}
       </Grid.Column>
     </Grid>
   );
