@@ -8,9 +8,9 @@ export const NavBar = () => {
         <Menu.Item header>
             <img src='./assets/logo.png' alt="logo" style={{marginRight: '10px'}}/>
         </Menu.Item>
-        <Menu.Item name="Tickets" />
+        <Menu.Item name="Activities" />
         <Menu.Item >
-            <Button positive content='Create Tickdt' />
+            <Button positive content='Create Activity' />
         </Menu.Item>
       </Container>
     </Menu>

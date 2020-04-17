@@ -3,7 +3,6 @@ import { List, Container } from "semantic-ui-react";
 import axios from "axios";
 import { ITicket } from "../models/ticket";
 import { NavBar } from "../../features/nav/NavBar";
-import { TicketDashboard } from "../../features/tickets/dashboard/TicketDashboard";
 
 const App = () => {
   const [tickets, setTickets] = useState<ITicket[]>([]);
@@ -18,7 +17,11 @@ const App = () => {
     <Fragment>
       <NavBar />
       <Container style={{marginTop: '7em'}}>
-        <TicketDashboard tickets={tickets}/>
+        <List>
+          {tickets.map(ticket => (
+            <List.Item key={ticket.id}>{ticket.title}</List.Item>
+          ))}
+        </List>
       </Container>
     </Fragment>
   );
