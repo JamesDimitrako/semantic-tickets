@@ -1,12 +1,20 @@
-import React, { useState, useEffect, Fragment, SyntheticEvent } from "react";
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  SyntheticEvent,
+  useContext,
+} from "react";
 import { Container } from "semantic-ui-react";
 import { ITicket } from "../models/ticket";
 import { NavBar } from "../../features/nav/NavBar";
 import { TicketDashboard } from "../../features/tickets/dashboard/TicketDashboard";
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
+import TicketStore from "../stores/ticketStore";
 
 const App = () => {
+  const ticketStore = useContext(TicketStore);
   const [tickets, setTickets] = useState<ITicket[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<ITicket | null>(null);
   const [editMode, setEditMode] = useState(false);

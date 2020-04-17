@@ -16,7 +16,7 @@ const TicketDetails: React.FC<IProps> = ({
   return (
     <Segment clearing>
       <Item.Group divided>
-        <Item>
+        <Item fixed="top">
           <Item.Content>
             <Item.Header as="a">{ticket.title}</Item.Header>
             <Item.Meta>Description</Item.Meta>

@@ -57,7 +57,7 @@ const TicketForm: React.FC<IProps> = ({
   };
 
   return (
-    <Segment clearing>
+    <Segment clearing >
       <Form onSubmit={handleSubmit}>
         <Form.Input
           onChange={handleInputChange}
