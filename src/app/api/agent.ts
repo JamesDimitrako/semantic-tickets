@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 import { ITicket } from "../models/ticket";
-import { resolve } from "dns";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 

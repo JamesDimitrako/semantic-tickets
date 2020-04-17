@@ -1,17 +1,21 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Item, Label, Button, Icon, Segment } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 
 interface IProps {
   tickets: ITicket[];
   selectTicket: (id: string) => void;
-  deleteTicket: (id: string) => void;
+  deleteTicket: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+  submitting: boolean;
+  target: string;
 }
 
 const TicketList: React.FC<IProps> = ({
   tickets,
   selectTicket,
   deleteTicket,
+  submitting,
+  target,
 }) => {
   return (
     <Segment clearing>
@@ -52,7 +56,9 @@ const TicketList: React.FC<IProps> = ({
                   </Button.Content>
                 </Button>
                 <Button
-                  onClick={() => deleteTicket(ticket.id)}
+                  name={ticket.id}
+                  onClick={(e) => deleteTicket(e, ticket.id)}
+                  loading={target === ticket.id && submitting}
                   floated="right"
                   color="red"
                   content="Delete"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Grid } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 import TicketList from "./TicketList";
@@ -14,7 +14,9 @@ interface IProps {
   setSelectedTicket: (ticket: ITicket | null) => void;
   createTicket: (ticket: ITicket) => void;
   editTicket: (ticket: ITicket) => void;
-  deleteTicket: (id: string) => void;
+  deleteTicket: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+  submitting: boolean;
+  target: string;
 }
 
 export const TicketDashboard: React.FC<IProps> = ({
@@ -27,6 +29,8 @@ export const TicketDashboard: React.FC<IProps> = ({
   createTicket,
   editTicket,
   deleteTicket,
+  submitting,
+  target,
 }) => {
   return (
     <Grid>
@@ -35,6 +39,8 @@ export const TicketDashboard: React.FC<IProps> = ({
           tickets={tickets}
           selectTicket={selectTicket}
           deleteTicket={deleteTicket}
+          submitting={submitting}
+          target={target}
         />
       </Grid.Column>
       <Grid.Column width={6}>
@@ -52,6 +58,7 @@ export const TicketDashboard: React.FC<IProps> = ({
             ticket={selectedTicket!}
             createTicket={createTicket}
             editTicket={editTicket}
+            submitting={submitting}
           />
         )}
       </Grid.Column>

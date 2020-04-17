@@ -8,6 +8,7 @@ interface IProps {
   ticket: ITicket;
   createTicket: (ticket: ITicket) => void;
   editTicket: (ticket: ITicket) => void;
+  submitting: boolean;
 }
 
 const TicketForm: React.FC<IProps> = ({
@@ -15,6 +16,7 @@ const TicketForm: React.FC<IProps> = ({
   ticket: initialFormState,
   createTicket,
   editTicket,
+  submitting,
 }) => {
   const initializeForm = () => {
     if (initialFormState) {
@@ -89,7 +91,13 @@ const TicketForm: React.FC<IProps> = ({
           placeholder="Deadline"
           value={ticket.dateDeadline}
         />
-        <Button floated="right" color="teal" type="submit" content="Submit" />
+        <Button
+          loading={submitting}
+          floated="right"
+          color="teal"
+          type="submit"
+          content="Submit"
+        />
         <Button
           onClick={() => setEditMode(false)}
           floated="right"
