@@ -5,9 +5,14 @@ import { ITicket } from "../../../app/models/ticket";
 interface IProps {
   tickets: ITicket[];
   selectTicket: (id: string) => void;
+  deleteTicket: (id: string) => void;
 }
 
-const TicketList: React.FC<IProps> = ({ tickets, selectTicket }) => {
+const TicketList: React.FC<IProps> = ({
+  tickets,
+  selectTicket,
+  deleteTicket,
+}) => {
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -34,6 +39,13 @@ const TicketList: React.FC<IProps> = ({ tickets, selectTicket }) => {
               </Item.Description>
               <Item.Extra>
                 <Label basic content="Category" />
+                <Button
+                  onClick={() => deleteTicket(ticket.id)}
+                  basic
+                  floated="right"
+                  color="red"
+                  content="Delete"
+                />
                 <Button floated="right" color="teal" animated>
                   <Button.Content visible>View</Button.Content>
                   <Button.Content

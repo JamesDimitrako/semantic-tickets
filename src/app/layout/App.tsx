@@ -32,6 +32,10 @@ const App = () => {
     setEditMode(false);
   };
 
+  const handleDeleteTicket = (id: string) => {
+    setTickets([...tickets.filter((a) => a.id !== id)]);
+  };
+
   useEffect(() => {
     axios
       .get<ITicket[]>("http://localhost:5000/api/tickets")
@@ -60,6 +64,7 @@ const App = () => {
           setSelectedTicket={setSelectedTicket}
           createTicket={handleCreateTicket}
           editTicket={handleEditTicket}
+          deleteTicket={handleDeleteTicket}
         />
       </Container>
     </Fragment>
