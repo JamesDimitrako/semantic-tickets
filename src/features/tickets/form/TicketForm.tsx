@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 
@@ -30,18 +30,48 @@ const TicketForm: React.FC<IProps> = ({
 
   const [ticket, setTicket] = useState<ITicket>(initializeForm);
 
+  const handleSubmit = () => {
+    console.log(ticket);
+  };
+
+  const handleInputChange = (
+    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.currentTarget;
+    setTicket({ ...ticket, [name]: value });
+  };
+
   return (
     <Segment clearing>
-      <Form>
-        <Form.Input placeholder="Title" value={ticket.title} />
+      <Form onSubmit={handleSubmit}>
+        <Form.Input
+          onChange={handleInputChange}
+          name="title"
+          placeholder="Title"
+          value={ticket.title}
+        />
         <Form.TextArea
+          onChange={handleInputChange}
+          name="description"
           rows={2}
           placeholder="Description"
           value={ticket.description}
         />
-        <Form.Input placeholder="Priority" value={ticket.priority} />
-        <Form.Input placeholder="Category" value={ticket.category} />
         <Form.Input
+          onChange={handleInputChange}
+          name="priority"
+          placeholder="Priority"
+          value={ticket.priority}
+        />
+        <Form.Input
+          onChange={handleInputChange}
+          name="category"
+          placeholder="Category"
+          value={ticket.category}
+        />
+        <Form.Input
+          onChange={handleInputChange}
+          name="deadline"
           type="date"
           placeholder="Deadline"
           value={ticket.dateDeadline}
