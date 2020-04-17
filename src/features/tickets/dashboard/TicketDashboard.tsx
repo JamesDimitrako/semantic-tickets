@@ -11,7 +11,7 @@ export const TicketDashboard: React.FC<IProps> = ({ tickets }) => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <TicketList />
+        <TicketList tickets={tickets} />
         {/* <List>
           {tickets.map(ticket => (
             <List.Item key={ticket.id}>{ticket.title}</List.Item>
