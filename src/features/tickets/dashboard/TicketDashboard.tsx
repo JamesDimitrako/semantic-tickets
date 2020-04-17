@@ -35,7 +35,9 @@ export const TicketDashboard: React.FC<IProps> = ({
             setSelectedTicket={setSelectedTicket}
           />
         )}
-        {editMode && <TicketForm setEditMode={setEditMode} />}
+        {editMode && (
+          <TicketForm setEditMode={setEditMode} ticket={selectedTicket!} />
+        )}
       </Grid.Column>
     </Grid>
   );
