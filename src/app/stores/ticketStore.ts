@@ -47,9 +47,36 @@ class TicketStore {
     }
   };
 
+  @action editTicket = async (ticket: ITicket) => {
+    this.submitting = true;
+    try {
+      await agent.Tickets.update(ticket);
+      this.ticketRegistry.set(ticket.id, ticket);
+      this.selectedTicket = ticket;
+      this.editMode = false;
+      this.submitting = false;
+    } catch (error) {
+      this.submitting = false;
+      console.log(error);
+    }
+  };
+
   @action openCreateForm = () => {
     this.editMode = true;
     this.selectedTicket = undefined;
+  };
+
+  @action openEditForm = (id: string) => {
+    this.selectedTicket = this.ticketRegistry.get(id);
+    this.editMode = true;
+  };
+
+  @action cancelSelectedTicket = () => {
+    this.selectedTicket = undefined;
+  };
+
+  @action cancelFormOpen = () => {
+    this.editMode = false;
   };
 
   @action selectTicket = (id: string) => {

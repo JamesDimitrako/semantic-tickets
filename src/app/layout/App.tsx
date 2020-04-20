@@ -23,17 +23,6 @@ const App = () => {
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState("");
 
-  const handleEditTicket = (ticket: ITicket) => {
-    setSubmitting(true);
-    agent.Tickets.update(ticket)
-      .then(() => {
-        setTickets([...tickets.filter((t) => t.id !== ticket.id), ticket]);
-        setSelectedTicket(ticket);
-        setEditMode(false);
-      })
-      .then(() => setSubmitting(false));
-  };
-
   const handleDeleteTicket = (
     event: SyntheticEvent<HTMLButtonElement>,
     id: string
@@ -59,9 +48,6 @@ const App = () => {
       <Container style={{ marginTop: "7em" }}>
         <TicketDashboard
           tickets={ticketStore.tickets}
-          setEditMode={setEditMode}
-          setSelectedActivity={setSelectedTicket}
-          editTicket={handleEditTicket}
           deleteTicket={handleDeleteTicket}
           submitting={submitting}
           target={target}

@@ -1,20 +1,15 @@
 import React, { useContext } from "react";
 import { Item, Segment, Label, Button } from "semantic-ui-react";
-import { ITicket } from "../../../app/models/ticket";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
 
-interface IProps {
-  setEditMode: (editMode: boolean) => void;
-  setSelectedActivity: (activity: ITicket | null) => void;
-}
-
-const TicketDetails: React.FC<IProps> = ({
-  setEditMode,
-  setSelectedActivity,
-}) => {
+const TicketDetails: React.FC = () => {
   const ticketStore = useContext(TicketStore);
-  const { selectedTicket: ticket } = ticketStore;
+  const {
+    selectedTicket: ticket,
+    openEditForm,
+    cancelSelectedTicket,
+  } = ticketStore;
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -44,13 +39,13 @@ const TicketDetails: React.FC<IProps> = ({
             <Item.Extra>
               <Button.Group widths={2}>
                 <Button
-                  onClick={() => setEditMode(true)}
+                  onClick={() => openEditForm(ticket!.id)}
                   basic
                   color="teal"
                   content="Edit"
                 />
                 <Button
-                  onClick={() => setSelectedActivity(null)}
+                  onClick={cancelSelectedTicket}
                   basic
                   color="grey"
                   content="Cancel"

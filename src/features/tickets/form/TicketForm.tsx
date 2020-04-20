@@ -6,20 +6,17 @@ import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
 
 interface IProps {
-  setEditMode: (editMode: boolean) => void;
   ticket: ITicket;
-  editTicket: (ticket: ITicket) => void;
-  submitting: boolean;
 }
 
-const TicketForm: React.FC<IProps> = ({
-  setEditMode,
-  ticket: initialFormState,
-  editTicket,
-  submitting,
-}) => {
+const TicketForm: React.FC<IProps> = ({ ticket: initialFormState }) => {
   const ticketStore = useContext(TicketStore);
-  const { createTicket } = ticketStore;
+  const {
+    createTicket,
+    editTicket,
+    submitting,
+    cancelSelectedTicket,
+  } = ticketStore;
   const initializeForm = () => {
     if (initialFormState) {
       return initialFormState;
@@ -101,7 +98,7 @@ const TicketForm: React.FC<IProps> = ({
           content="Submit"
         />
         <Button
-          onClick={() => setEditMode(false)}
+          onClick={cancelSelectedTicket}
           floated="right"
           content="Cancel"
         />

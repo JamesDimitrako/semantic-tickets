@@ -9,21 +9,15 @@ import TicketStore from "../../../app/stores/ticketStore";
 
 interface IProps {
   tickets: ITicket[];
-  setEditMode: (editMode: boolean) => void;
-  setSelectedActivity: (activity: ITicket | null) => void;
-  editTicket: (ticket: ITicket) => void;
   deleteTicket: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
   submitting: boolean;
   target: string;
 }
 
 const TicketDashboard: React.FC<IProps> = ({
-  setEditMode,
-  editTicket,
   deleteTicket,
   submitting,
   target,
-  setSelectedActivity,
 }) => {
   const ticketStore = useContext(TicketStore);
   const { editMode, selectedTicket } = ticketStore;
@@ -37,19 +31,11 @@ const TicketDashboard: React.FC<IProps> = ({
         />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedTicket && !editMode && (
-          <TicketDetails
-            setEditMode={setEditMode}
-            setSelectedActivity={setSelectedActivity}
-          />
-        )}
+        {selectedTicket && !editMode && <TicketDetails />}
         {editMode && (
           <TicketForm
             key={(selectedTicket && selectedTicket.id) || 0}
-            setEditMode={setEditMode}
             ticket={selectedTicket!}
-            editTicket={editTicket}
-            submitting={submitting}
           />
         )}
       </Grid.Column>
