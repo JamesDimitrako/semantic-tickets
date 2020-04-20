@@ -7,28 +7,13 @@ import TicketForm from "../form/TicketForm";
 import { observer } from "mobx-react-lite";
 import TicketStore from "../../../app/stores/ticketStore";
 
-interface IProps {
-  tickets: ITicket[];
-  deleteTicket: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
-
-const TicketDashboard: React.FC<IProps> = ({
-  deleteTicket,
-  submitting,
-  target,
-}) => {
+const TicketDashboard: React.FC = () => {
   const ticketStore = useContext(TicketStore);
   const { editMode, selectedTicket } = ticketStore;
   return (
     <Grid>
       <Grid.Column width={10}>
-        <TicketList
-          deleteTicket={deleteTicket}
-          submitting={submitting}
-          target={target}
-        />
+        <TicketList />
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedTicket && !editMode && <TicketDetails />}

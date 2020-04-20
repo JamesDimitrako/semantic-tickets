@@ -23,19 +23,6 @@ const App = () => {
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState("");
 
-  const handleDeleteTicket = (
-    event: SyntheticEvent<HTMLButtonElement>,
-    id: string
-  ) => {
-    setSubmitting(true);
-    setTarget(event.currentTarget.name);
-    agent.Tickets.delete(id)
-      .then(() => {
-        setTickets([...tickets.filter((a) => a.id !== id)]);
-      })
-      .then(() => setSubmitting(false));
-  };
-
   useEffect(() => {
     ticketStore.loadTickets();
   }, [ticketStore]);
@@ -46,12 +33,7 @@ const App = () => {
     <Fragment>
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <TicketDashboard
-          tickets={ticketStore.tickets}
-          deleteTicket={handleDeleteTicket}
-          submitting={submitting}
-          target={target}
-        />
+        <TicketDashboard />
       </Container>
     </Fragment>
   );

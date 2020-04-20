@@ -1,17 +1,17 @@
-import React, { SyntheticEvent, useContext } from "react";
+import React, { useContext } from "react";
 import { Item, Label, Button, Icon, Segment } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import TicketStore from "../../../app/stores/ticketStore";
 
-interface IProps {
-  deleteTicket: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
-
-const TicketList: React.FC<IProps> = ({ deleteTicket, submitting, target }) => {
+const TicketList: React.FC = () => {
   const ticketStore = useContext(TicketStore);
-  const { ticketsByDate, selectTicket } = ticketStore;
+  const {
+    ticketsByDate,
+    selectTicket,
+    deleteTicket,
+    submitting,
+    target,
+  } = ticketStore;
   return (
     <Segment clearing>
       <Item.Group divided>

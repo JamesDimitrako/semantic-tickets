@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx";
-import { createContext } from "react";
+import { createContext, SyntheticEvent } from "react";
 import { ITicket } from "../models/ticket";
 import agent from "../api/agent";
 
@@ -10,6 +10,7 @@ class TicketStore {
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitting = false;
+  @observable target = "";
 
   @computed get ticketsByDate() {
     return Array.from(this.ticketRegistry.values()).sort(
@@ -57,6 +58,24 @@ class TicketStore {
       this.submitting = false;
     } catch (error) {
       this.submitting = false;
+      console.log(error);
+    }
+  };
+
+  @action deleteTicket = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    this.submitting = true;
+    this.target = event.currentTarget.name;
+    try {
+      await agent.Tickets.delete(id);
+      this.ticketRegistry.delete(id);
+      this.submitting = false;
+      this.target = "";
+    } catch (error) {
+      this.submitting = false;
+      this.target = "";
       console.log(error);
     }
   };
