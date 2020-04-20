@@ -11,11 +11,11 @@ interface IProps {
 
 const TicketList: React.FC<IProps> = ({ deleteTicket, submitting, target }) => {
   const ticketStore = useContext(TicketStore);
-  const { tickets, selectTicket } = ticketStore;
+  const { ticketsByDate, selectTicket } = ticketStore;
   return (
     <Segment clearing>
       <Item.Group divided>
-        {tickets.map((ticket) => (
+        {ticketsByDate.map((ticket) => (
           <Item key={ticket.id}>
             <Item.Content>
               <Item.Header as="a">{ticket.title}</Item.Header>

@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { createContext } from "react";
 import { ITicket } from "../models/ticket";
 import agent from "../api/agent";
@@ -9,6 +9,12 @@ class TicketStore {
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitting = false;
+
+  @computed get ticketsByDate() {
+    return this.tickets.sort(
+      (a, b) => Date.parse(a.dateModified) - Date.parse(b.dateModified)
+    );
+  }
 
   @action loadTickets = async () => {
     this.loadingInitial = true;
