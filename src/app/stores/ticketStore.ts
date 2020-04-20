@@ -4,6 +4,7 @@ import { ITicket } from "../models/ticket";
 import agent from "../api/agent";
 
 class TicketStore {
+  @observable ticketRegistry = new Map();
   @observable tickets: ITicket[] = [];
   @observable selectedTicket: ITicket | undefined = undefined;
   @observable loadingInitial = false;
@@ -11,7 +12,7 @@ class TicketStore {
   @observable submitting = false;
 
   @computed get ticketsByDate() {
-    return this.tickets.sort(
+    return Array.from(this.ticketRegistry.values()).sort(
       (a, b) => Date.parse(a.dateModified) - Date.parse(b.dateModified)
     );
   }
@@ -24,7 +25,7 @@ class TicketStore {
         ticket.dateFirst = ticket.dateFirst.split(".")[0];
         ticket.dateModified = ticket.dateModified.split(".")[0];
         ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
-        this.tickets.push(ticket);
+        this.ticketRegistry.set(ticket.id, ticket);
       });
       this.loadingInitial = false;
     } catch (error) {
@@ -37,7 +38,7 @@ class TicketStore {
     this.submitting = true;
     try {
       await agent.Tickets.create(ticket);
-      this.tickets.push(ticket);
+      this.ticketRegistry.set(ticket.id, ticket);
       this.editMode = false;
       this.submitting = false;
     } catch (error) {
@@ -52,7 +53,7 @@ class TicketStore {
   };
 
   @action selectTicket = (id: string) => {
-    this.selectedTicket = this.tickets.find((a) => a.id === id);
+    this.selectedTicket = this.ticketRegistry.get(id);
     this.editMode = false;
   };
 }
