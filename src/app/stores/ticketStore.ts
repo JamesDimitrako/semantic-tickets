@@ -1,7 +1,9 @@
-import { observable, action, computed } from "mobx";
+import { observable, action, computed, configure, runInAction } from "mobx";
 import { createContext, SyntheticEvent } from "react";
 import { ITicket } from "../models/ticket";
 import agent from "../api/agent";
+
+configure({ enforceActions: "always" });
 
 class TicketStore {
   @observable ticketRegistry = new Map();
@@ -22,16 +24,20 @@ class TicketStore {
     this.loadingInitial = true;
     try {
       const tickets = await agent.Tickets.list();
-      tickets.forEach((ticket) => {
-        ticket.dateFirst = ticket.dateFirst.split(".")[0];
-        ticket.dateModified = ticket.dateModified.split(".")[0];
-        ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
-        this.ticketRegistry.set(ticket.id, ticket);
+      runInAction("loading tickets", () => {
+        tickets.forEach((ticket) => {
+          ticket.dateFirst = ticket.dateFirst.split(".")[0];
+          ticket.dateModified = ticket.dateModified.split(".")[0];
+          ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
+          this.ticketRegistry.set(ticket.id, ticket);
+        });
+        this.loadingInitial = false;
       });
-      this.loadingInitial = false;
     } catch (error) {
+      runInAction("loading tickets error", () => {
+        this.loadingInitial = false;
+      });
       console.log(error);
-      this.loadingInitial = false;
     }
   };
 
@@ -39,11 +45,15 @@ class TicketStore {
     this.submitting = true;
     try {
       await agent.Tickets.create(ticket);
-      this.ticketRegistry.set(ticket.id, ticket);
-      this.editMode = false;
-      this.submitting = false;
+      runInAction("create ticket", () => {
+        this.ticketRegistry.set(ticket.id, ticket);
+        this.editMode = false;
+        this.submitting = false;
+      });
     } catch (error) {
-      this.submitting = false;
+      runInAction("create ticket action", () => {
+        this.submitting = false;
+      });
       console.log(error);
     }
   };
@@ -52,12 +62,16 @@ class TicketStore {
     this.submitting = true;
     try {
       await agent.Tickets.update(ticket);
-      this.ticketRegistry.set(ticket.id, ticket);
-      this.selectedTicket = ticket;
-      this.editMode = false;
-      this.submitting = false;
+      runInAction("edit ticket", () => {
+        this.ticketRegistry.set(ticket.id, ticket);
+        this.selectedTicket = ticket;
+        this.editMode = false;
+        this.submitting = false;
+      });
     } catch (error) {
-      this.submitting = false;
+      runInAction("edit ticket error", () => {
+        this.submitting = false;
+      });
       console.log(error);
     }
   };
@@ -70,12 +84,16 @@ class TicketStore {
     this.target = event.currentTarget.name;
     try {
       await agent.Tickets.delete(id);
-      this.ticketRegistry.delete(id);
-      this.submitting = false;
-      this.target = "";
+      runInAction("delete ticket", () => {
+        this.ticketRegistry.delete(id);
+        this.submitting = false;
+        this.target = "";
+      });
     } catch (error) {
-      this.submitting = false;
-      this.target = "";
+      runInAction("delete ticket error", () => {
+        this.submitting = false;
+        this.target = "";
+      });
       console.log(error);
     }
   };

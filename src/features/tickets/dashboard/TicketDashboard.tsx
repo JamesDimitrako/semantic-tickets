@@ -1,6 +1,5 @@
-import React, { SyntheticEvent, useContext } from "react";
+import React, { useContext } from "react";
 import { Grid } from "semantic-ui-react";
-import { ITicket } from "../../../app/models/ticket";
 import TicketList from "./TicketList";
 import TicketDetails from "../details/TicketDetails";
 import TicketForm from "../form/TicketForm";
