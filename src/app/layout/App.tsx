@@ -7,11 +7,12 @@ import React, {
 } from "react";
 import { Container } from "semantic-ui-react";
 import { ITicket } from "../models/ticket";
-import { NavBar } from "../../features/nav/NavBar";
-import { TicketDashboard } from "../../features/tickets/dashboard/TicketDashboard";
+import NavBar from "../../features/nav/NavBar";
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import TicketStore from "../stores/ticketStore";
+import { observer } from "mobx-react-lite";
+import TicketDashboard from "../../features/tickets/dashboard/TicketDashboard";
 
 const App = () => {
   const ticketStore = useContext(TicketStore);
@@ -21,27 +22,6 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState("");
-
-  const handleSelectTicket = (id: string) => {
-    setSelectedTicket(tickets.filter((t) => t.id === id)[0]);
-    setEditMode(false);
-  };
-
-  const handleOpenCreateForm = () => {
-    setSelectedTicket(null);
-    setEditMode(true);
-  };
-
-  const handleCreateTicket = (ticket: ITicket) => {
-    setSubmitting(true);
-    agent.Tickets.create(ticket)
-      .then(() => {
-        setTickets([...tickets, ticket]);
-        setSelectedTicket(ticket);
-        setEditMode(false);
-      })
-      .then(() => setSubmitting(false));
-  };
 
   const handleEditTicket = (ticket: ITicket) => {
     setSubmitting(true);
@@ -68,34 +48,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    agent.Tickets.list()
-      .then((response) => {
-        let tickets: ITicket[] = [];
-        response.forEach((ticket) => {
-          ticket.dateFirst = ticket.dateFirst.split(".")[0];
-          ticket.dateModified = ticket.dateModified.split(".")[0];
-          ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
-          tickets.push(ticket);
-        });
-        setTickets(tickets);
-      })
-      .then(() => setLoading(false));
-  }, []);
+    ticketStore.loadTickets();
+  }, [ticketStore]);
 
-  if (loading) return <LoadingComponent content="Loading" />;
+  if (ticketStore.loadingInitial) return <LoadingComponent content="Loading" />;
 
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm} />
+      <NavBar />
       <Container style={{ marginTop: "7em" }}>
         <TicketDashboard
-          tickets={tickets}
-          selectTicket={handleSelectTicket}
-          selectedTicket={selectedTicket!}
-          editMode={editMode}
+          tickets={ticketStore.tickets}
           setEditMode={setEditMode}
-          setSelectedTicket={setSelectedTicket}
-          createTicket={handleCreateTicket}
+          setSelectedActivity={setSelectedTicket}
           editTicket={handleEditTicket}
           deleteTicket={handleDeleteTicket}
           submitting={submitting}
@@ -106,4 +71,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default observer(App);

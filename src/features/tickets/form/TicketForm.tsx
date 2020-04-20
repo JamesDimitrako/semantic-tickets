@@ -1,12 +1,13 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useContext } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 import { v4 as uuid } from "uuid";
+import TicketStore from "../../../app/stores/ticketStore";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   setEditMode: (editMode: boolean) => void;
   ticket: ITicket;
-  createTicket: (ticket: ITicket) => void;
   editTicket: (ticket: ITicket) => void;
   submitting: boolean;
 }
@@ -14,10 +15,11 @@ interface IProps {
 const TicketForm: React.FC<IProps> = ({
   setEditMode,
   ticket: initialFormState,
-  createTicket,
   editTicket,
   submitting,
 }) => {
+  const ticketStore = useContext(TicketStore);
+  const { createTicket } = ticketStore;
   const initializeForm = () => {
     if (initialFormState) {
       return initialFormState;
@@ -57,7 +59,7 @@ const TicketForm: React.FC<IProps> = ({
   };
 
   return (
-    <Segment clearing >
+    <Segment clearing>
       <Form onSubmit={handleSubmit}>
         <Form.Input
           onChange={handleInputChange}
@@ -108,4 +110,4 @@ const TicketForm: React.FC<IProps> = ({
   );
 };
 
-export default TicketForm;
+export default observer(TicketForm);

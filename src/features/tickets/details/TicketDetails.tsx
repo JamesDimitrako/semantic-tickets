@@ -1,39 +1,41 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Item, Segment, Label, Button } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
+import TicketStore from "../../../app/stores/ticketStore";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
-  ticket: ITicket;
   setEditMode: (editMode: boolean) => void;
-  setSelectedTicket: (ticket: ITicket | null) => void;
+  setSelectedActivity: (activity: ITicket | null) => void;
 }
 
 const TicketDetails: React.FC<IProps> = ({
-  ticket,
   setEditMode,
-  setSelectedTicket,
+  setSelectedActivity,
 }) => {
+  const ticketStore = useContext(TicketStore);
+  const { selectedTicket: ticket } = ticketStore;
   return (
     <Segment clearing>
       <Item.Group divided>
         <Item fixed="top">
           <Item.Content>
-            <Item.Header as="a">{ticket.title}</Item.Header>
+            <Item.Header as="a">{ticket!.title}</Item.Header>
             <Item.Meta>Description</Item.Meta>
 
             <Item.Description>
-              <div>{ticket.description}</div>
+              <div>{ticket!.description}</div>
               <Label>
                 Date Created
-                <Label.Detail>{ticket.dateFirst}</Label.Detail>
+                <Label.Detail>{ticket!.dateFirst}</Label.Detail>
               </Label>
               <Label>
                 Date Modified
-                <Label.Detail>{ticket.dateModified}</Label.Detail>
+                <Label.Detail>{ticket!.dateModified}</Label.Detail>
               </Label>
               <Label>
                 Deadline
-                <Label.Detail>{ticket.dateDeadline}</Label.Detail>
+                <Label.Detail>{ticket!.dateDeadline}</Label.Detail>
               </Label>
             </Item.Description>
             <Item.Extra>
@@ -48,7 +50,7 @@ const TicketDetails: React.FC<IProps> = ({
                   content="Edit"
                 />
                 <Button
-                  onClick={() => setSelectedTicket(null)}
+                  onClick={() => setSelectedActivity(null)}
                   basic
                   color="grey"
                   content="Cancel"
@@ -62,4 +64,4 @@ const TicketDetails: React.FC<IProps> = ({
   );
 };
 
-export default TicketDetails;
+export default observer(TicketDetails);

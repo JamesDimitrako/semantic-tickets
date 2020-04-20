@@ -1,22 +1,17 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useContext } from "react";
 import { Item, Label, Button, Icon, Segment } from "semantic-ui-react";
-import { ITicket } from "../../../app/models/ticket";
+import { observer } from "mobx-react-lite";
+import TicketStore from "../../../app/stores/ticketStore";
 
 interface IProps {
-  tickets: ITicket[];
-  selectTicket: (id: string) => void;
   deleteTicket: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
   submitting: boolean;
   target: string;
 }
 
-const TicketList: React.FC<IProps> = ({
-  tickets,
-  selectTicket,
-  deleteTicket,
-  submitting,
-  target,
-}) => {
+const TicketList: React.FC<IProps> = ({ deleteTicket, submitting, target }) => {
+  const ticketStore = useContext(TicketStore);
+  const { tickets, selectTicket } = ticketStore;
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -72,4 +67,4 @@ const TicketList: React.FC<IProps> = ({
   );
 };
 
-export default TicketList;
+export default observer(TicketList);
