@@ -26,7 +26,7 @@ const App = () => {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/tickets" component={TicketDashboard} />
         <Route path="/tickets/:id" component={TicketDetails} />
-        <Route path="/createTicket" component={TicketForm} />
+        <Route path={["/createTicket", "/manage/:id"]} component={TicketForm} />
       </Container>
     </Fragment>
   );

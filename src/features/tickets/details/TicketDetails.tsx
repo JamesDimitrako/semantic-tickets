@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Item, Segment, Label, Button } from "semantic-ui-react";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 interface DetailsParams {
@@ -58,7 +58,8 @@ const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
             <Item.Extra>
               <Button.Group widths={2}>
                 <Button
-                  onClick={() => openEditForm(ticket!.id)}
+                  as={Link}
+                  to={`/manage/${ticket.id}`}
                   basic
                   color="teal"
                   content="Edit"
