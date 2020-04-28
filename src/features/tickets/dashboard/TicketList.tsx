@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Item, Label, Button, Icon, Segment } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import TicketStore from "../../../app/stores/ticketStore";
+import { Link } from "react-router-dom";
 
 const TicketList: React.FC = () => {
   const ticketStore = useContext(TicketStore);
@@ -40,7 +41,8 @@ const TicketList: React.FC = () => {
                 <Label basic content="Category" />
 
                 <Button
-                  onClick={() => selectTicket(ticket.id)}
+                  as={Link}
+                  to={`/tickets/${ticket.id}`}
                   floated="right"
                   color="teal"
                   animated

@@ -1,15 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Item, Segment, Label, Button } from "semantic-ui-react";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-const TicketDetails: React.FC = () => {
+interface DetailsParams {
+  id: string;
+}
+
+const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
+  match,
+  history,
+}) => {
   const ticketStore = useContext(TicketStore);
   const {
-    selectedTicket: ticket,
+    ticket,
     openEditForm,
     cancelSelectedTicket,
+    loadTicket,
+    loadingInitial,
   } = ticketStore;
+
+  useEffect(() => {
+    loadTicket(match.params.id);
+  }, [loadTicket]);
+
+  if (loadingInitial || !ticket)
+    return <LoadingComponent content="Loading ticket" />;
+
   return (
     <Segment clearing>
       <Item.Group divided>
@@ -45,7 +64,7 @@ const TicketDetails: React.FC = () => {
                   content="Edit"
                 />
                 <Button
-                  onClick={cancelSelectedTicket}
+                  onClick={() => history.push("/tickets")}
                   basic
                   color="grey"
                   content="Cancel"

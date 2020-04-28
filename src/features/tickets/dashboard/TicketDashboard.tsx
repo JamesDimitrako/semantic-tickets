@@ -8,20 +8,14 @@ import TicketStore from "../../../app/stores/ticketStore";
 
 const TicketDashboard: React.FC = () => {
   const ticketStore = useContext(TicketStore);
-  const { editMode, selectedTicket } = ticketStore;
+  const { editMode, ticket } = ticketStore;
   return (
     <Grid>
       <Grid.Column width={10}>
         <TicketList />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedTicket && !editMode && <TicketDetails />}
-        {editMode && (
-          <TicketForm
-            key={(selectedTicket && selectedTicket.id) || 0}
-            ticket={selectedTicket!}
-          />
-        )}
+        <h2>Filters</h2>
       </Grid.Column>
     </Grid>
   );

@@ -8,7 +8,7 @@ configure({ enforceActions: "always" });
 class TicketStore {
   @observable ticketRegistry = new Map();
   @observable tickets: ITicket[] = [];
-  @observable selectedTicket: ITicket | undefined = undefined;
+  @observable ticket: ITicket | undefined;
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitting = false;
@@ -41,6 +41,31 @@ class TicketStore {
     }
   };
 
+  @action loadTicket = async (id: string) => {
+    let ticket = this.getTicket(id);
+    if (ticket) {
+      this.ticket = ticket;
+    } else {
+      this.loadingInitial = true;
+      try {
+        ticket = await agent.Tickets.details(id);
+        runInAction("getting ticket", () => {
+          this.ticket = ticket;
+          this.loadingInitial = false;
+        });
+      } catch (error) {
+        runInAction("getting ticket", () => {
+          this.loadingInitial = false;
+        });
+        console.log(error);
+      }
+    }
+  };
+
+  getTicket = (id: string) => {
+    return this.ticketRegistry.get(id);
+  };
+
   @action createTicket = async (ticket: ITicket) => {
     this.submitting = true;
     try {
@@ -64,7 +89,7 @@ class TicketStore {
       await agent.Tickets.update(ticket);
       runInAction("edit ticket", () => {
         this.ticketRegistry.set(ticket.id, ticket);
-        this.selectedTicket = ticket;
+        this.ticket = ticket;
         this.editMode = false;
         this.submitting = false;
       });
@@ -100,16 +125,16 @@ class TicketStore {
 
   @action openCreateForm = () => {
     this.editMode = true;
-    this.selectedTicket = undefined;
+    this.ticket = undefined;
   };
 
   @action openEditForm = (id: string) => {
-    this.selectedTicket = this.ticketRegistry.get(id);
+    this.ticket = this.ticketRegistry.get(id);
     this.editMode = true;
   };
 
   @action cancelSelectedTicket = () => {
-    this.selectedTicket = undefined;
+    this.ticket = undefined;
   };
 
   @action cancelFormOpen = () => {
@@ -117,7 +142,7 @@ class TicketStore {
   };
 
   @action selectTicket = (id: string) => {
-    this.selectedTicket = this.ticketRegistry.get(id);
+    this.ticket = this.ticketRegistry.get(id);
     this.editMode = false;
   };
 }

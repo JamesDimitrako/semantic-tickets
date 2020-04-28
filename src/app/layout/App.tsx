@@ -5,6 +5,10 @@ import LoadingComponent from "./LoadingComponent";
 import TicketStore from "../stores/ticketStore";
 import { observer } from "mobx-react-lite";
 import TicketDashboard from "../../features/tickets/dashboard/TicketDashboard";
+import { Route } from "react-router-dom";
+import HomePage from "../../features/home/HomePage";
+import TicketForm from "../../features/tickets/form/TicketForm";
+import TicketDetails from "../../features/tickets/details/TicketDetails";
 
 const App = () => {
   const ticketStore = useContext(TicketStore);
@@ -19,7 +23,10 @@ const App = () => {
     <Fragment>
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <TicketDashboard />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/tickets" component={TicketDashboard} />
+        <Route path="/tickets/:id" component={TicketDetails} />
+        <Route path="/createTicket" component={TicketForm} />
       </Container>
     </Fragment>
   );
