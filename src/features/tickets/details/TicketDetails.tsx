@@ -1,9 +1,13 @@
 import React, { useContext, useEffect } from "react";
-import { Item, Segment, Label, Button } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import TicketDetailedHeader from "./TicketDetailedHeader";
+import TicketDetailedInfo from "./TicketDetailedInfo";
+import TicketDetailedChat from "./TicketDetailedChat";
+import TicketDetailedSidebar from "./TicketDetailedSidebar";
 
 interface DetailsParams {
   id: string;
@@ -11,7 +15,6 @@ interface DetailsParams {
 
 const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
-  history,
 }) => {
   const ticketStore = useContext(TicketStore);
   const { ticket, loadTicket, loadingInitial } = ticketStore;
@@ -24,52 +27,16 @@ const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
     return <LoadingComponent content="Loading ticket" />;
 
   return (
-    <Segment clearing>
-      <Item.Group divided>
-        <Item fixed="top">
-          <Item.Content>
-            <Item.Header as="a">{ticket!.title}</Item.Header>
-            <Item.Meta>Description</Item.Meta>
-
-            <Item.Description>
-              <div>{ticket!.description}</div>
-              <Label>
-                Date Created
-                <Label.Detail>{ticket!.dateFirst}</Label.Detail>
-              </Label>
-              <Label>
-                Date Modified
-                <Label.Detail>{ticket!.dateModified}</Label.Detail>
-              </Label>
-              <Label>
-                Deadline
-                <Label.Detail>{ticket!.dateDeadline}</Label.Detail>
-              </Label>
-            </Item.Description>
-            <Item.Extra>
-              <Label basic content="Category" />
-            </Item.Extra>
-            <Item.Extra>
-              <Button.Group widths={2}>
-                <Button
-                  as={Link}
-                  to={`/manage/${ticket.id}`}
-                  basic
-                  color="teal"
-                  content="Edit"
-                />
-                <Button
-                  onClick={() => history.push("/tickets")}
-                  basic
-                  color="grey"
-                  content="Cancel"
-                />
-              </Button.Group>
-            </Item.Extra>
-          </Item.Content>
-        </Item>
-      </Item.Group>
-    </Segment>
+    <Grid>
+      <Grid.Column width={10}>
+        <TicketDetailedHeader ticket={ticket} />
+        <TicketDetailedInfo ticket={ticket} />
+        <TicketDetailedChat ticket={ticket} />
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <TicketDetailedSidebar />
+      </Grid.Column>
+    </Grid>
   );
 };
 
