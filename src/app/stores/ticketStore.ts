@@ -7,10 +7,8 @@ configure({ enforceActions: "always" });
 
 class TicketStore {
   @observable ticketRegistry = new Map();
-  @observable tickets: ITicket[] = [];
   @observable ticket: ITicket | null = null;
   @observable loadingInitial = false;
-  @observable editMode = false;
   @observable submitting = false;
   @observable target = "";
 
@@ -76,7 +74,6 @@ class TicketStore {
       await agent.Tickets.create(ticket);
       runInAction("create ticket", () => {
         this.ticketRegistry.set(ticket.id, ticket);
-        this.editMode = false;
         this.submitting = false;
       });
     } catch (error) {
@@ -94,7 +91,6 @@ class TicketStore {
       runInAction("edit ticket", () => {
         this.ticketRegistry.set(ticket.id, ticket);
         this.ticket = ticket;
-        this.editMode = false;
         this.submitting = false;
       });
     } catch (error) {
@@ -125,29 +121,6 @@ class TicketStore {
       });
       console.log(error);
     }
-  };
-
-  @action openCreateForm = () => {
-    this.editMode = true;
-    this.ticket = null;
-  };
-
-  @action openEditForm = (id: string) => {
-    this.ticket = this.ticketRegistry.get(id);
-    this.editMode = true;
-  };
-
-  @action cancelSelectedTicket = () => {
-    this.ticket = null;
-  };
-
-  @action cancelFormOpen = () => {
-    this.editMode = false;
-  };
-
-  @action selectTicket = (id: string) => {
-    this.ticket = this.ticketRegistry.get(id);
-    this.editMode = false;
   };
 }
 

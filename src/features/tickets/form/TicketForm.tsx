@@ -19,7 +19,6 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     createTicket,
     editTicket,
     submitting,
-    cancelSelectedTicket,
     ticket: initialFormState,
     loadTicket,
     clearTicket,
@@ -118,7 +117,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           content="Submit"
         />
         <Button
-          onClick={cancelSelectedTicket}
+          onClick={() => history.push("/tickets")}
           floated="right"
           content="Cancel"
         />
