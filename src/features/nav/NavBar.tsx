@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Menu, Container, Button } from "semantic-ui-react";
-import TicketStore from "../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
 import { NavLink } from "react-router-dom";
 
 const NavBar: React.FC = () => {
-  const ticketStore = useContext(TicketStore);
   return (
     <Menu fixed="top" inverted>
       <Container>

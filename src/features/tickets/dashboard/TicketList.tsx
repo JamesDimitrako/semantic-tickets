@@ -6,13 +6,7 @@ import { Link } from "react-router-dom";
 
 const TicketList: React.FC = () => {
   const ticketStore = useContext(TicketStore);
-  const {
-    ticketsByDate,
-    selectTicket,
-    deleteTicket,
-    submitting,
-    target,
-  } = ticketStore;
+  const { ticketsByDate, deleteTicket, submitting, target } = ticketStore;
   return (
     <Segment clearing>
       <Item.Group divided>

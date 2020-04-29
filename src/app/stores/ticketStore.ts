@@ -8,7 +8,7 @@ configure({ enforceActions: "always" });
 class TicketStore {
   @observable ticketRegistry = new Map();
   @observable tickets: ITicket[] = [];
-  @observable ticket: ITicket | undefined;
+  @observable ticket: ITicket | null = null;
   @observable loadingInitial = false;
   @observable editMode = false;
   @observable submitting = false;
@@ -60,6 +60,10 @@ class TicketStore {
         console.log(error);
       }
     }
+  };
+
+  @action clearTicket = () => {
+    this.ticket = null;
   };
 
   getTicket = (id: string) => {
@@ -125,7 +129,7 @@ class TicketStore {
 
   @action openCreateForm = () => {
     this.editMode = true;
-    this.ticket = undefined;
+    this.ticket = null;
   };
 
   @action openEditForm = (id: string) => {
@@ -134,7 +138,7 @@ class TicketStore {
   };
 
   @action cancelSelectedTicket = () => {
-    this.ticket = undefined;
+    this.ticket = null;
   };
 
   @action cancelFormOpen = () => {

@@ -12,6 +12,7 @@ interface DetailsParams {
 
 const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
+  history,
 }) => {
   const ticketStore = useContext(TicketStore);
   const {
@@ -21,15 +22,8 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     cancelSelectedTicket,
     ticket: initialFormState,
     loadTicket,
+    clearTicket,
   } = ticketStore;
-
-  useEffect(() => {
-    if (match.params.id) {
-      loadTicket(match.params.id).then(
-        () => initialFormState && setTicket(initialFormState)
-      );
-    }
-  });
 
   const [ticket, setTicket] = useState<ITicket>({
     id: "",
@@ -42,15 +36,35 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     dateDeadline: "",
   });
 
+  useEffect(() => {
+    if (match.params.id && ticket.id.length === 0) {
+      loadTicket(match.params.id).then(
+        () => initialFormState && setTicket(initialFormState)
+      );
+    }
+
+    return () => {
+      clearTicket();
+    };
+  }, [
+    loadTicket,
+    clearTicket,
+    match.params.id,
+    initialFormState,
+    ticket.id.length,
+  ]);
+
   const handleSubmit = () => {
     if (ticket.id.length === 0) {
       let newTicket = {
         ...ticket,
         id: uuid(),
       };
-      createTicket(newTicket);
+      createTicket(newTicket).then(() =>
+        history.push(`/tickets/${newTicket.id}`)
+      );
     } else {
-      editTicket(ticket);
+      editTicket(ticket).then(() => history.push(`/tickets/${ticket.id}`));
     }
   };
 

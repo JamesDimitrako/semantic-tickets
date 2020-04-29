@@ -5,12 +5,12 @@ import LoadingComponent from "./LoadingComponent";
 import TicketStore from "../stores/ticketStore";
 import { observer } from "mobx-react-lite";
 import TicketDashboard from "../../features/tickets/dashboard/TicketDashboard";
-import { Route } from "react-router-dom";
+import { Route, withRouter, RouteComponentProps } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import TicketForm from "../../features/tickets/form/TicketForm";
 import TicketDetails from "../../features/tickets/details/TicketDetails";
 
-const App = () => {
+const App: React.FC<RouteComponentProps> = ({ location }) => {
   const ticketStore = useContext(TicketStore);
 
   useEffect(() => {
@@ -26,10 +26,14 @@ const App = () => {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/tickets" component={TicketDashboard} />
         <Route path="/tickets/:id" component={TicketDetails} />
-        <Route path={["/createTicket", "/manage/:id"]} component={TicketForm} />
+        <Route
+          key={location.key}
+          path={["/createTicket", "/manage/:id"]}
+          component={TicketForm}
+        />
       </Container>
     </Fragment>
   );
 };
 
-export default observer(App);
+export default withRouter(observer(App));

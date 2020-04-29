@@ -14,17 +14,11 @@ const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
   history,
 }) => {
   const ticketStore = useContext(TicketStore);
-  const {
-    ticket,
-    openEditForm,
-    cancelSelectedTicket,
-    loadTicket,
-    loadingInitial,
-  } = ticketStore;
+  const { ticket, loadTicket, loadingInitial } = ticketStore;
 
   useEffect(() => {
     loadTicket(match.params.id);
-  }, [loadTicket]);
+  }, [loadTicket, match.params.id]);
 
   if (loadingInitial || !ticket)
     return <LoadingComponent content="Loading ticket" />;
