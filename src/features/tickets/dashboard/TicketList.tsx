@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from "react";
-import { Item, Label, Segment } from "semantic-ui-react";
+import { Item, Label } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import TicketStore from "../../../app/stores/ticketStore";
 import TicketsListItem from "./TicketsListItem";
@@ -14,13 +14,11 @@ const TicketList: React.FC = () => {
           <Label size="large" color="teal">
             {group}
           </Label>
-          <Segment clearing>
-            <Item.Group divided>
-              {tickets.map((ticket) => (
-                <TicketsListItem key={ticket.id} ticket={ticket} />
-              ))}
-            </Item.Group>
-          </Segment>
+          <Item.Group divided>
+            {tickets.map((ticket) => (
+              <TicketsListItem key={ticket.id} ticket={ticket} />
+            ))}
+          </Item.Group>
         </Fragment>
       ))}
     </Fragment>
