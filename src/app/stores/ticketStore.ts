@@ -13,8 +13,21 @@ class TicketStore {
   @observable target = "";
 
   @computed get ticketsByDate() {
-    return Array.from(this.ticketRegistry.values()).sort(
+    return this.groupTicketsByDate(Array.from(this.ticketRegistry.values()));
+  }
+
+  groupTicketsByDate(tickets: ITicket[]) {
+    const sortedTickets = tickets.sort(
       (a, b) => Date.parse(a.dateModified) - Date.parse(b.dateModified)
+    );
+    return Object.entries(
+      sortedTickets.reduce((tickets, ticket) => {
+        const dateCreated = ticket.dateFirst.split("T")[0];
+        tickets[dateCreated] = tickets[dateCreated]
+          ? [...tickets[dateCreated], ticket]
+          : [ticket];
+        return tickets;
+      }, {} as { [key: string]: ITicket[] })
     );
   }
 
