@@ -21,17 +21,24 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
 
   return (
     <Fragment>
-      <NavBar />
-      <Container style={{ marginTop: "7em" }}>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/tickets" component={TicketDashboard} />
-        <Route path="/tickets/:id" component={TicketDetails} />
-        <Route
-          key={location.key}
-          path={["/createTicket", "/manage/:id"]}
-          component={TicketForm}
-        />
-      </Container>
+      <Route exact path="/" component={HomePage} />
+      <Route
+        path={"/(.+)"}
+        render={() => (
+          <Fragment>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+              <Route exact path="/tickets" component={TicketDashboard} />
+              <Route path="/tickets/:id" component={TicketDetails} />
+              <Route
+                key={location.key}
+                path={["/createTicket", "/manage/:id"]}
+                component={TicketForm}
+              />
+            </Container>
+          </Fragment>
+        )}
+      />
     </Fragment>
   );
 };
