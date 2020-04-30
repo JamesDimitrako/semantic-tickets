@@ -68,7 +68,7 @@ class TicketStore {
         runInAction("getting ticket", () => {
           this.loadingInitial = false;
         });
-        console.log(error);
+        throw error;
       }
     }
   };

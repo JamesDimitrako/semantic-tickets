@@ -4,7 +4,7 @@ import { ITicket } from "../models/ticket";
 axios.defaults.baseURL = "http://localhost:5000/api";
 
 axios.interceptors.response.use(undefined, (error) => {
-  console.log(error.response);
+  if (error.response.status === 404) throw error.response;
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
