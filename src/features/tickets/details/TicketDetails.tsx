@@ -15,16 +15,13 @@ interface DetailsParams {
 
 const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
-  history,
 }) => {
   const ticketStore = useContext(TicketStore);
   const { ticket, loadTicket, loadingInitial } = ticketStore;
 
   useEffect(() => {
-    loadTicket(match.params.id).catch(() => {
-      history.push("/notfound");
-    });
-  }, [loadTicket, match.params.id, history]);
+    loadTicket(match.params.id);
+  }, [loadTicket, match.params.id]);
 
   if (loadingInitial) return <LoadingComponent content="Loading ticket" />;
 

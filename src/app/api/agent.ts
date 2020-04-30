@@ -1,10 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 import { ITicket } from "../models/ticket";
+import { history } from "../..";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
 axios.interceptors.response.use(undefined, (error) => {
-  if (error.response.status === 404) throw error.response;
+  if (error.response.status === 404) {
+    history.push("/notfound");
+  }
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
