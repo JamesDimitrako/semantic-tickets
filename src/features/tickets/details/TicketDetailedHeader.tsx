@@ -2,6 +2,7 @@ import React from "react";
 import { Segment, Item, Header, Button, Image } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
 
 const ticketImageStyle = {
   filter: "brightness(30%)",
@@ -47,7 +48,12 @@ const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
       <Segment clearing attached="bottom">
         <Button color="teal">Join Ticket</Button>
         <Button>Cancel attendance</Button>
-        <Button style={manageTicketStyle} floated="right">
+        <Button
+          as={Link}
+          to={`/manage/${ticket.id}`}
+          style={manageTicketStyle}
+          floated="right"
+        >
           Manage Ticket
         </Button>
       </Segment>

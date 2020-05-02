@@ -5,6 +5,11 @@ import { v4 as uuid } from "uuid";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
+import { Form as FinalForm, Field } from "react-final-form";
+import TextInput from "../../../app/common/form/TextInput";
+import TextAreaInput from "../../../app/common/form/TextAreaInput";
+import SelectInput from "../../../app/common/form/SelectInput";
+import { category } from "../../../app/common/options/categoryOptions";
 
 interface DetailsParams {
   id: string;
@@ -53,77 +58,85 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     ticket.id.length,
   ]);
 
-  const handleSubmit = () => {
-    if (ticket.id.length === 0) {
-      let newTicket = {
-        ...ticket,
-        id: uuid(),
-      };
-      createTicket(newTicket).then(() =>
-        history.push(`/tickets/${newTicket.id}`)
-      );
-    } else {
-      editTicket(ticket).then(() => history.push(`/tickets/${ticket.id}`));
-    }
-  };
+  // const handleSubmit = () => {
+  //   if (ticket.id.length === 0) {
+  //     let newTicket = {
+  //       ...ticket,
+  //       id: uuid(),
+  //     };
+  //     createTicket(newTicket).then(() =>
+  //       history.push(`/tickets/${newTicket.id}`)
+  //     );
+  //   } else {
+  //     editTicket(ticket).then(() => history.push(`/tickets/${ticket.id}`));
+  //   }
+  // };
 
-  const handleInputChange = (
-    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.currentTarget;
-    setTicket({ ...ticket, [name]: value });
+  const handleFinalFormSubmit = (values: any) => {
+    console.log(values);
   };
 
   return (
     <Grid>
       <Grid.Column width={10}>
         <Segment clearing>
-          <Form onSubmit={handleSubmit}>
-            <Form.Input
-              onChange={handleInputChange}
-              name="title"
-              placeholder="Title"
-              value={ticket.title}
-            />
-            <Form.TextArea
-              onChange={handleInputChange}
-              name="description"
-              rows={2}
-              placeholder="Description"
-              value={ticket.description}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="priority"
-              placeholder="Priority"
-              value={ticket.priority}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="category"
-              placeholder="Category"
-              value={ticket.category}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="deadline"
-              type="date"
-              placeholder="Deadline"
-              value={ticket.dateDeadline}
-            />
-            <Button
-              loading={submitting}
-              floated="right"
-              color="teal"
-              type="submit"
-              content="Submit"
-            />
-            <Button
-              onClick={() => history.push("/tickets")}
-              floated="right"
-              content="Cancel"
-            />
-          </Form>
+          <FinalForm
+            onSubmit={handleFinalFormSubmit}
+            render={({ handleSubmit }) => (
+              <Form onSubmit={handleSubmit}>
+                <label>Title</label>
+                <Field
+                  name="title"
+                  placeholder="Title"
+                  value={ticket.title}
+                  component="input"
+                />
+                <label>Description</label>
+                <Field
+                  name="description"
+                  placeholder="Description"
+                  rows={3}
+                  value={ticket.description}
+                  component={TextAreaInput}
+                />
+                <label>Priority</label>
+                <Field
+                  component={TextInput}
+                  name="priority"
+                  placeholder="Priority"
+                  value={ticket.priority}
+                />
+                <label>Category</label>
+                <Field
+                  component={SelectInput}
+                  options={category}
+                  name="category"
+                  placeholder="Category"
+                  value={ticket.category}
+                />
+                <label>Deadline</label>
+                <Field
+                  component={TextInput}
+                  name="deadline"
+                  type="date"
+                  placeholder="Deadline"
+                  value={ticket.dateDeadline}
+                />
+                <Button
+                  loading={submitting}
+                  floated="right"
+                  color="teal"
+                  type="submit"
+                  content="Submit"
+                />
+                <Button
+                  onClick={() => history.push("/tickets")}
+                  floated="right"
+                  content="Cancel"
+                />
+              </Form>
+            )}
+          />
         </Segment>
       </Grid.Column>
     </Grid>

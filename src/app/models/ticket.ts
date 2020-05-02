@@ -4,7 +4,7 @@ export interface ITicket {
   description: string;
   priority: string;
   category: string;
-  dateFirst: string;
-  dateModified: string;
-  dateDeadline: string;
+  dateFirst: Date | null;
+  dateModified: Date | null;
+  dateDeadline: Date | null;
 }
