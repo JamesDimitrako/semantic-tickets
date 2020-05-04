@@ -3,6 +3,7 @@ import { createContext, SyntheticEvent } from "react";
 import { ITicket } from "../models/ticket";
 import agent from "../api/agent";
 import { history } from "../..";
+import { toast } from "react-toastify";
 
 configure({ enforceActions: "always" });
 
@@ -102,7 +103,8 @@ class TicketStore {
       runInAction("create ticket action", () => {
         this.submitting = false;
       });
-      console.log(error);
+      toast.error("Problem submitting data");
+      console.log(error.response);
     }
   };
 

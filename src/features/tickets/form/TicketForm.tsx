@@ -1,9 +1,6 @@
-import React, { useState, FormEvent, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Segment, Form, Button, Grid } from "semantic-ui-react";
-import {
-  ITicketFormValues,
-  TicketFormValues,
-} from "../../../app/models/ticket";
+import { TicketFormValues } from "../../../app/models/ticket";
 import { v4 as uuid } from "uuid";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
@@ -15,6 +12,25 @@ import SelectInput from "../../../app/common/form/SelectInput";
 import { category } from "../../../app/common/options/categoryOptions";
 import DateInput from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/util/util";
+import {
+  combineValidators,
+  isRequired,
+  composeValidators,
+  hasLengthGreaterThan,
+} from "revalidate";
+
+const validate = combineValidators({
+  title: isRequired("Title"),
+  category: isRequired("Category"),
+  description: composeValidators(
+    isRequired("Description"),
+    hasLengthGreaterThan(4)({
+      message: "Description needs to be at least 5 characters",
+    })
+  )(),
+  date: isRequired("Date"),
+  time: isRequired("Time"),
+});
 
 interface DetailsParams {
   id: string;
@@ -26,7 +42,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 }) => {
   const ticketStore = useContext(TicketStore);
   const { createTicket, editTicket } = ticketStore;
-  const { submitting, ticket: initialFormState, loadTicket } = ticketStore;
+  const { submitting, loadTicket } = ticketStore;
 
   const [ticket, setTicket] = useState(new TicketFormValues());
   const [loading, setLoading] = useState(false);
@@ -77,16 +93,17 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       <Grid.Column width={10}>
         <Segment clearing>
           <FinalForm
+            validate={validate}
             initialValues={ticket}
             onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit }) => (
+            render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
                 <label>Title</label>
                 <Field
                   name="title"
                   placeholder="Title"
                   value={ticket.title}
-                  component="input"
+                  component={TextInput}
                 />
                 <label>Description</label>
                 <Field
@@ -131,7 +148,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
                 <Button
                   loading={submitting}
-                  disabled={loading}
+                  disabled={loading || invalid || pristine}
                   floated="right"
                   color="teal"
                   type="submit"
@@ -143,7 +160,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                       ? () => history.push(`/tickets/${ticket.id}`)
                       : () => history.push("/tickets")
                   }
-                  disabled={loading}
+                  disabled={loading || invalid || pristine}
                   floated="right"
                   content="Cancel"
                 />
