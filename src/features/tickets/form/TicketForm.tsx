@@ -1,6 +1,9 @@
 import React, { useState, FormEvent, useContext, useEffect } from "react";
 import { Segment, Form, Button, Grid } from "semantic-ui-react";
-import { ITicketFormValues } from "../../../app/models/ticket";
+import {
+  ITicketFormValues,
+  TicketFormValues,
+} from "../../../app/models/ticket";
 import { v4 as uuid } from "uuid";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
@@ -22,36 +25,19 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   history,
 }) => {
   const ticketStore = useContext(TicketStore);
-  const {
-    submitting,
-    ticket: initialFormState,
-    loadTicket,
-    clearTicket,
-  } = ticketStore;
+  const { submitting, ticket: initialFormState, loadTicket } = ticketStore;
 
-  const [ticket, setTicket] = useState<ITicketFormValues>({
-    id: undefined,
-    title: "",
-    description: "",
-    priority: "",
-    category: "",
-    dateFirst: undefined,
-    time: undefined,
-    dateModified: undefined,
-    dateDeadline: undefined,
-  });
+  const [ticket, setTicket] = useState(new TicketFormValues());
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (match.params.id && ticket.id) {
-      loadTicket(match.params.id).then(
-        () => initialFormState && setTicket(initialFormState)
-      );
+    if (match.params.id) {
+      setLoading(true);
+      loadTicket(match.params.id)
+        .then((ticket) => setTicket(new TicketFormValues(ticket)))
+        .finally(() => setLoading(false));
     }
-
-    return () => {
-      clearTicket();
-    };
-  }, [loadTicket, clearTicket, match.params.id, initialFormState, ticket.id]);
+  }, [loadTicket, match.params.id]);
 
   // const handleSubmit = () => {
   //   if (ticket.id.length === 0) {
@@ -79,9 +65,10 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       <Grid.Column width={10}>
         <Segment clearing>
           <FinalForm
+            initialValues={ticket}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
+              <Form onSubmit={handleSubmit} loading={loading}>
                 <label>Title</label>
                 <Field
                   name="title"
@@ -126,12 +113,13 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                     name="time"
                     time={true}
                     placeholder="Deadline"
-                    value={ticket.dateDeadline}
+                    value={ticket.time}
                   />
                 </Form.Group>
 
                 <Button
                   loading={submitting}
+                  disabled={loading}
                   floated="right"
                   color="teal"
                   type="submit"
@@ -139,6 +127,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                 />
                 <Button
                   onClick={() => history.push("/tickets")}
+                  disabled={loading}
                   floated="right"
                   content="Cancel"
                 />

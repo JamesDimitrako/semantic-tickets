@@ -58,6 +58,7 @@ class TicketStore {
     let ticket = this.getTicket(id);
     if (ticket) {
       this.ticket = ticket;
+      return ticket;
     } else {
       this.loadingInitial = true;
       try {
@@ -69,6 +70,7 @@ class TicketStore {
           this.ticket = ticket;
           this.loadingInitial = false;
         });
+        return ticket;
       } catch (error) {
         runInAction("getting ticket", () => {
           this.loadingInitial = false;
