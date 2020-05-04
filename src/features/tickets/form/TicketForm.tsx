@@ -25,6 +25,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   history,
 }) => {
   const ticketStore = useContext(TicketStore);
+  const { createTicket, editTicket } = ticketStore;
   const { submitting, ticket: initialFormState, loadTicket } = ticketStore;
 
   const [ticket, setTicket] = useState(new TicketFormValues());
@@ -57,6 +58,17 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...ticket } = values;
     ticket.dateDeadline = dateAndTime;
+    if (!ticket.id) {
+      let newTicket = {
+        ...ticket,
+        id: uuid(),
+      };
+      createTicket(newTicket).then(() =>
+        history.push(`/tickets/${newTicket.id}`)
+      );
+    } else {
+      editTicket(ticket).then(() => history.push(`/tickets/${ticket.id}`));
+    }
     console.log(ticket);
   };
 
@@ -126,7 +138,11 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   content="Submit"
                 />
                 <Button
-                  onClick={() => history.push("/tickets")}
+                  onClick={
+                    ticket.id
+                      ? () => history.push(`/tickets/${ticket.id}`)
+                      : () => history.push("/tickets")
+                  }
                   disabled={loading}
                   floated="right"
                   content="Cancel"

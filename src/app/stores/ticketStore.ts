@@ -2,6 +2,7 @@ import { observable, action, computed, configure, runInAction } from "mobx";
 import { createContext, SyntheticEvent } from "react";
 import { ITicket } from "../models/ticket";
 import agent from "../api/agent";
+import { history } from "../..";
 
 configure({ enforceActions: "always" });
 
@@ -68,6 +69,7 @@ class TicketStore {
           ticket.dateDeadline = new Date(ticket.dateDeadline);
           ticket.dateModified = new Date(ticket.dateModified);
           this.ticket = ticket;
+          this.ticketRegistry.set(ticket.id, ticket);
           this.loadingInitial = false;
         });
         return ticket;
@@ -95,6 +97,7 @@ class TicketStore {
         this.ticketRegistry.set(ticket.id, ticket);
         this.submitting = false;
       });
+      history.push(`/tickets/${ticket.id}`);
     } catch (error) {
       runInAction("create ticket action", () => {
         this.submitting = false;
