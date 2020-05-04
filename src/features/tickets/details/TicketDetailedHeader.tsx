@@ -3,6 +3,7 @@ import { Segment, Item, Header, Button, Image } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const ticketImageStyle = {
   filter: "brightness(30%)",
@@ -36,7 +37,7 @@ const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
                   content={ticket.title}
                   style={{ color: "white" }}
                 />
-                <p>{ticket.dateFirst}</p>
+                <p>{format(ticket.dateFirst, "eeee do MMMM")}</p>
                 <p>
                   Hosted by <strong>Bob</strong>
                 </p>

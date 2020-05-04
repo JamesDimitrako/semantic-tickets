@@ -18,11 +18,11 @@ class TicketStore {
 
   groupTicketsByDate(tickets: ITicket[]) {
     const sortedTickets = tickets.sort(
-      (a, b) => Date.parse(a.dateModified) - Date.parse(b.dateModified)
+      (a, b) => a.dateFirst.getTime() - b.dateFirst.getTime()
     );
     return Object.entries(
       sortedTickets.reduce((tickets, ticket) => {
-        const dateCreated = ticket.dateFirst.split("T")[0];
+        const dateCreated = ticket.dateFirst.toISOString().split("T")[0];
         tickets[dateCreated] = tickets[dateCreated]
           ? [...tickets[dateCreated], ticket]
           : [ticket];
@@ -37,9 +37,11 @@ class TicketStore {
       const tickets = await agent.Tickets.list();
       runInAction("loading tickets", () => {
         tickets.forEach((ticket) => {
-          ticket.dateFirst = ticket.dateFirst.split(".")[0];
-          ticket.dateModified = ticket.dateModified.split(".")[0];
-          ticket.dateDeadline = ticket.dateDeadline.split(".")[0];
+          ticket.dateFirst = new Date(ticket.dateFirst);
+          ticket.dateDeadline = new Date(ticket.dateDeadline);
+          ticket.dateModified = new Date(ticket.dateModified);
+          //ticket.dateModified = ticket.dateModified!.split(".")[0];
+          //ticket.dateDeadline = ticket.dateDeadline!.split(".")[0];
           this.ticketRegistry.set(ticket.id, ticket);
         });
         this.loadingInitial = false;
@@ -61,6 +63,9 @@ class TicketStore {
       try {
         ticket = await agent.Tickets.details(id);
         runInAction("getting ticket", () => {
+          ticket.dateFirst = new Date(ticket.dateFirst);
+          ticket.dateDeadline = new Date(ticket.dateDeadline);
+          ticket.dateModified = new Date(ticket.dateModified);
           this.ticket = ticket;
           this.loadingInitial = false;
         });

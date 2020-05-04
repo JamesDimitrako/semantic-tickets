@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, useContext, useEffect } from "react";
 import { Segment, Form, Button, Grid } from "semantic-ui-react";
-import { ITicket } from "../../../app/models/ticket";
+import { ITicketFormValues } from "../../../app/models/ticket";
 import { v4 as uuid } from "uuid";
 import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
@@ -10,6 +10,8 @@ import TextInput from "../../../app/common/form/TextInput";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
 import SelectInput from "../../../app/common/form/SelectInput";
 import { category } from "../../../app/common/options/categoryOptions";
+import DateInput from "../../../app/common/form/DateInput";
+import { combineDateAndTime } from "../../../app/common/util/util";
 
 interface DetailsParams {
   id: string;
@@ -21,27 +23,26 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 }) => {
   const ticketStore = useContext(TicketStore);
   const {
-    createTicket,
-    editTicket,
     submitting,
     ticket: initialFormState,
     loadTicket,
     clearTicket,
   } = ticketStore;
 
-  const [ticket, setTicket] = useState<ITicket>({
-    id: "",
+  const [ticket, setTicket] = useState<ITicketFormValues>({
+    id: undefined,
     title: "",
     description: "",
     priority: "",
     category: "",
-    dateFirst: "",
-    dateModified: "",
-    dateDeadline: "",
+    dateFirst: undefined,
+    time: undefined,
+    dateModified: undefined,
+    dateDeadline: undefined,
   });
 
   useEffect(() => {
-    if (match.params.id && ticket.id.length === 0) {
+    if (match.params.id && ticket.id) {
       loadTicket(match.params.id).then(
         () => initialFormState && setTicket(initialFormState)
       );
@@ -50,13 +51,7 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     return () => {
       clearTicket();
     };
-  }, [
-    loadTicket,
-    clearTicket,
-    match.params.id,
-    initialFormState,
-    ticket.id.length,
-  ]);
+  }, [loadTicket, clearTicket, match.params.id, initialFormState, ticket.id]);
 
   // const handleSubmit = () => {
   //   if (ticket.id.length === 0) {
@@ -73,7 +68,10 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   // };
 
   const handleFinalFormSubmit = (values: any) => {
-    console.log(values);
+    const dateAndTime = combineDateAndTime(values.date, values.time);
+    const { date, time, ...ticket } = values;
+    ticket.dateDeadline = dateAndTime;
+    console.log(ticket);
   };
 
   return (
@@ -115,13 +113,23 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   value={ticket.category}
                 />
                 <label>Deadline</label>
-                <Field
-                  component={TextInput}
-                  name="deadline"
-                  type="date"
-                  placeholder="Deadline"
-                  value={ticket.dateDeadline}
-                />
+                <Form.Group widths="equal">
+                  <Field
+                    component={DateInput}
+                    name="date"
+                    date={true}
+                    placeholder="Deadline"
+                    value={ticket.dateDeadline}
+                  />
+                  <Field
+                    component={DateInput}
+                    name="time"
+                    time={true}
+                    placeholder="Deadline"
+                    value={ticket.dateDeadline}
+                  />
+                </Form.Group>
+
                 <Button
                   loading={submitting}
                   floated="right"

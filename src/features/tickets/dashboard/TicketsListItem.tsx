@@ -3,6 +3,7 @@ import { Item, Label, Button, Icon, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TicketStore from "../../../app/stores/ticketStore";
 import { ITicket } from "../../../app/models/ticket";
+import { format } from "date-fns";
 
 const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
   const ticketStore = useContext(TicketStore);
@@ -26,15 +27,15 @@ const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
       <Segment>
         <Label>
           Date Created
-          <Label.Detail>{ticket.dateFirst}</Label.Detail>
+          <Label.Detail>{format(ticket.dateFirst, "h:mm a")}</Label.Detail>
         </Label>
         <Label>
           Date Modified
-          <Label.Detail>{ticket.dateModified}</Label.Detail>
+          <Label.Detail>{format(ticket.dateModified, "h:mm a")}</Label.Detail>
         </Label>
         <Label>
           Deadline
-          <Label.Detail>{ticket.dateDeadline}</Label.Detail>
+          <Label.Detail>{format(ticket.dateDeadline, "h:mm a")}</Label.Detail>
         </Label>
       </Segment>
       <Segment secondary>Followers will go here</Segment>

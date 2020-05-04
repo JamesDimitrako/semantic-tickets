@@ -4,7 +4,11 @@ export interface ITicket {
   description: string;
   priority: string;
   category: string;
-  dateFirst: Date | null;
-  dateModified: Date | null;
-  dateDeadline: Date | null;
+  dateFirst: Date;
+  dateModified: Date;
+  dateDeadline: Date;
+}
+
+export interface ITicketFormValues extends Partial<ITicket> {
+  time?: Date;
 }

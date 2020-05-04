@@ -1,6 +1,7 @@
 import React from "react";
 import { Segment, Grid, Icon } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
+import { format } from "date-fns";
 
 const TicketDetailedInfo: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
   return (
@@ -21,7 +22,7 @@ const TicketDetailedInfo: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
             <Icon name="calendar" size="large" color="teal" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <span>{ticket.dateDeadline}</span>
+            <span>{format(ticket.dateDeadline, "eeee do MMMM")}</span>
           </Grid.Column>
         </Grid>
       </Segment>
