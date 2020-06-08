@@ -14,6 +14,7 @@ import TicketForm from "../../features/tickets/form/TicketForm";
 import TicketDetails from "../../features/tickets/details/TicketDetails";
 import NotFound from "./NotFound";
 import { ToastContainer } from "react-toastify";
+import LoginForm from "../../features/user/LoginForm";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
@@ -34,6 +35,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={["/createTicket", "/manage/:id"]}
                   component={TicketForm}
                 />
+                <Route path="/login" component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

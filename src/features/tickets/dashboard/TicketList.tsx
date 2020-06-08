@@ -1,12 +1,12 @@
 import React, { useContext, Fragment } from "react";
 import { Item, Label } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import TicketStore from "../../../app/stores/ticketStore";
 import TicketsListItem from "./TicketsListItem";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const TicketList: React.FC = () => {
-  const ticketStore = useContext(TicketStore);
-  const { ticketsByDate } = ticketStore;
+  const rootStore = useContext(RootStoreContext);
+  const { ticketsByDate } = rootStore.ticketStore;
   return (
     <Fragment>
       {ticketsByDate.map(([group, tickets]) => (

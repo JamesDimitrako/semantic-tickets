@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { Segment, Form, Button, Grid } from "semantic-ui-react";
 import { TicketFormValues } from "../../../app/models/ticket";
 import { v4 as uuid } from "uuid";
-import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
@@ -18,6 +17,7 @@ import {
   composeValidators,
   hasLengthGreaterThan,
 } from "revalidate";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const validate = combineValidators({
   title: isRequired("Title"),
@@ -40,9 +40,13 @@ const TicketForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
   history,
 }) => {
-  const ticketStore = useContext(TicketStore);
-  const { createTicket, editTicket } = ticketStore;
-  const { submitting, loadTicket } = ticketStore;
+  const rootStore = useContext(RootStoreContext);
+  const {
+    createTicket,
+    editTicket,
+    submitting,
+    loadTicket,
+  } = rootStore.ticketStore;
 
   const [ticket, setTicket] = useState(new TicketFormValues());
   const [loading, setLoading] = useState(false);

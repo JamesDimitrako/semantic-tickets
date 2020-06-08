@@ -62,4 +62,5 @@ const User = {
 
 export default {
   Tickets,
+  User,
 };

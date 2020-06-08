@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Item, Label, Button, Icon, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import TicketStore from "../../../app/stores/ticketStore";
 import { ITicket } from "../../../app/models/ticket";
 import { format } from "date-fns";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
-  const ticketStore = useContext(TicketStore);
-  const { deleteTicket, submitting, target } = ticketStore;
+  const rootStore = useContext(RootStoreContext);
+  const { deleteTicket, submitting, target } = rootStore.ticketStore;
   return (
     <Segment.Group>
       <Segment>

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import TicketStore from "../../../app/stores/ticketStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
@@ -8,6 +7,7 @@ import TicketDetailedHeader from "./TicketDetailedHeader";
 import TicketDetailedInfo from "./TicketDetailedInfo";
 import TicketDetailedChat from "./TicketDetailedChat";
 import TicketDetailedSidebar from "./TicketDetailedSidebar";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface DetailsParams {
   id: string;
@@ -16,8 +16,8 @@ interface DetailsParams {
 const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
 }) => {
-  const ticketStore = useContext(TicketStore);
-  const { ticket, loadTicket, loadingInitial } = ticketStore;
+  const rootStore = useContext(RootStoreContext);
+  const { ticket, loadTicket, loadingInitial } = rootStore.ticketStore;
 
   useEffect(() => {
     loadTicket(match.params.id);

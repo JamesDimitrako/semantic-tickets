@@ -3,16 +3,17 @@ import { Grid } from "semantic-ui-react";
 import TicketList from "./TicketList";
 import { observer } from "mobx-react-lite";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import TicketStore from "../../../app/stores/ticketStore";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const TicketDashboard: React.FC = () => {
-  const ticketStore = useContext(TicketStore);
+  const rootStore = useContext(RootStoreContext);
+  const { loadTickets, loadingInitial } = rootStore.ticketStore;
 
   useEffect(() => {
-    ticketStore.loadTickets();
-  }, [ticketStore]);
+    loadTickets();
+  }, [loadTickets]);
 
-  if (ticketStore.loadingInitial) return <LoadingComponent content="Loading" />;
+  if (loadingInitial) return <LoadingComponent content="Loading" />;
 
   return (
     <Grid>
