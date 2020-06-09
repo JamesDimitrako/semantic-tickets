@@ -68,7 +68,7 @@ const User = {
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post(`/user/login`, user),
   register: (user: IUserFormValues): Promise<IUser> =>
-    requests.post(`/user/register`, user),
+    requests.post("/user/register", user),
 };
 
 export default {

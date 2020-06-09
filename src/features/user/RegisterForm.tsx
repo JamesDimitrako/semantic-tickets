@@ -9,21 +9,23 @@ import { combineValidators, isRequired } from "revalidate";
 import ErrorMessage from "../../app/common/form/ErrorMessage";
 
 const validate = combineValidators({
+  username: isRequired("username"),
+  displayName: isRequired("displayName"),
   email: isRequired("email"),
   password: isRequired("password"),
 });
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { login } = rootStore.userStore;
+  const { register } = rootStore.userStore;
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
-        login(values).catch((error) => ({
+        register(values).catch((error) => ({
           [FORM_ERROR]: error,
         }))
       }
-      validate={validate}
+      //   validate={validate}
       render={({
         handleSubmit,
         submitting,
@@ -35,9 +37,15 @@ const LoginForm = () => {
         <Form onSubmit={handleSubmit}>
           <Header
             as="h2"
-            content="Login to Sharp.Tickets"
+            content="Sign up to Sharp.Tickets"
             color="teal"
             textAlign="center"
+          />
+          <Field name="username" component={TextInput} placeholder="Username" />
+          <Field
+            name="displayName"
+            component={TextInput}
+            placeholder="DisplayName"
           />
           <Field name="email" component={TextInput} placeholder="Email" />
           <Field
@@ -47,17 +55,14 @@ const LoginForm = () => {
             type="password"
           />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage
-              error={submitError}
-              text="Invalid Email or Password"
-            />
+            <ErrorMessage error={submitError} />
           )}
           <br />
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
             color="teal"
-            content="Login"
+            content="Register"
             fluid
           />
         </Form>
@@ -66,4 +71,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
