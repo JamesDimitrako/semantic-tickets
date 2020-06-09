@@ -49,12 +49,11 @@ const LoginForm = () => {
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage
               error={submitError}
-              text="Invalid Email or Password"
+              text="Invalid email or password"
             />
           )}
-          <br />
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={invalid && (!dirtySinceLastSubmit || pristine)}
             loading={submitting}
             color="teal"
             content="Login"

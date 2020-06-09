@@ -25,7 +25,7 @@ const RegisterForm = () => {
           [FORM_ERROR]: error,
         }))
       }
-      //   validate={validate}
+      validate={validate}
       render={({
         handleSubmit,
         submitting,
@@ -59,7 +59,7 @@ const RegisterForm = () => {
           )}
           <br />
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={invalid && (!dirtySinceLastSubmit || pristine)}
             loading={submitting}
             color="teal"
             content="Register"

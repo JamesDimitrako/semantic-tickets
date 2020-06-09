@@ -37,6 +37,7 @@ const HomePage = () => {
             <Header as="h2" inverted content="Welcome to Sharp.Tickets" />
             <Button
               onClick={() => openModal(<LoginForm />)}
+              to="/login"
               size="huge"
               inverted
             >
