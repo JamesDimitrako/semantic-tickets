@@ -4,6 +4,8 @@ export interface ITicket {
   description: string;
   priority: string;
   category: string;
+  participating: boolean;
+  isHost: boolean;
   dateFirst: Date;
   dateModified: Date;
   dateDeadline: Date;

@@ -47,16 +47,20 @@ const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
         </Segment>
       </Segment>
       <Segment clearing attached="bottom">
-        <Button color="teal">Join Ticket</Button>
-        <Button>Cancel attendance</Button>
-        <Button
-          as={Link}
-          to={`/manage/${ticket.id}`}
-          style={manageTicketStyle}
-          floated="right"
-        >
-          Manage Ticket
-        </Button>
+        {ticket.isHost ? (
+          <Button
+            as={Link}
+            to={`/manage/${ticket.id}`}
+            style={manageTicketStyle}
+            floated="right"
+          >
+            Manage Ticket
+          </Button>
+        ) : ticket.participating ? (
+          <Button>Cancel attendance</Button>
+        ) : (
+          <Button color="teal">Join Ticket</Button>
+        )}
       </Segment>
     </Segment.Group>
   );

@@ -9,18 +9,43 @@ import TicketListItemAttendees from "./TicketListItemAttendees";
 const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
   const rootStore = useContext(RootStoreContext);
   const { deleteTicket, submitting, target } = rootStore.ticketStore;
+  const host = ticket.attendees.filter((x) => x.isHost)[0];
   return (
     <Segment.Group>
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image size="tiny" circular src="/assets/user.png" />
+            <Item.Image
+              size="tiny"
+              circular
+              src={host.image || "/assets/user.png"}
+            />
             <Item.Content>
-              <Item.Header as="a">{ticket.title}</Item.Header>
+              <Item.Header as={Link} to={`/tickets/${ticket.id}`}>
+                {ticket.title}
+              </Item.Header>
               <Item.Description>
-                <div>Hosted by Bob</div>
+                <div>Hosted by {host.displayName}</div>
                 <Label basic content="Category" />
               </Item.Description>
+              {ticket.isHost && (
+                <Item.Description>
+                  <Label
+                    basic
+                    color="orange"
+                    content="You are hosting this ticket"
+                  />
+                </Item.Description>
+              )}
+              {ticket.participating && !ticket.isHost && (
+                <Item.Description>
+                  <Label
+                    basic
+                    color="green"
+                    content="You are participating in this ticket"
+                  />
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>

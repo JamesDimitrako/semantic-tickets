@@ -5,6 +5,7 @@ import agent from "../api/agent";
 import { history } from "../..";
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
+import { setTicketProps } from "../common/util/util";
 
 export default class TicketStore {
   rootStore: RootStore;
@@ -43,11 +44,7 @@ export default class TicketStore {
       const tickets = await agent.Tickets.list();
       runInAction("loading tickets", () => {
         tickets.forEach((ticket) => {
-          ticket.dateFirst = new Date(ticket.dateFirst);
-          ticket.dateDeadline = new Date(ticket.dateDeadline);
-          ticket.dateModified = new Date(ticket.dateModified);
-          //ticket.dateModified = ticket.dateModified!.split(".")[0];
-          //ticket.dateDeadline = ticket.dateDeadline!.split(".")[0];
+          setTicketProps(ticket, this.rootStore.userStore.user!);
           this.ticketRegistry.set(ticket.id, ticket);
         });
         this.loadingInitial = false;
@@ -70,9 +67,7 @@ export default class TicketStore {
       try {
         ticket = await agent.Tickets.details(id);
         runInAction("getting ticket", () => {
-          ticket.dateFirst = new Date(ticket.dateFirst);
-          ticket.dateDeadline = new Date(ticket.dateDeadline);
-          ticket.dateModified = new Date(ticket.dateModified);
+          setTicketProps(ticket, this.rootStore.userStore.user!);
           this.ticket = ticket;
           this.ticketRegistry.set(ticket.id, ticket);
           this.loadingInitial = false;

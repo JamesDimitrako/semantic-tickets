@@ -1,3 +1,6 @@
+import { ITicket } from "../../models/ticket";
+import { IUser } from "../../models/user";
+
 export const combineDateAndTime = (date: Date, time: Date) => {
   const timeString = time.getHours() + ":" + time.getMinutes() + ":00";
 
@@ -7,4 +10,17 @@ export const combineDateAndTime = (date: Date, time: Date) => {
   const dateString = `${year}-${month}-${day}`;
 
   return new Date(dateString + " " + timeString);
+};
+
+export const setTicketProps = (ticket: ITicket, user: IUser) => {
+  ticket.dateFirst = new Date(ticket.dateFirst);
+  ticket.dateDeadline = new Date(ticket.dateDeadline);
+  ticket.dateModified = new Date(ticket.dateModified);
+  ticket.participating = ticket.attendees.some(
+    (a) => a.username === user.username
+  );
+  ticket.isHost = ticket.attendees.some(
+    (a) => a.username === user.username && a.isHost
+  );
+  return ticket;
 };
