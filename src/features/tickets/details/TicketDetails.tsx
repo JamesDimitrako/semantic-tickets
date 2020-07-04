@@ -35,7 +35,7 @@ const TicketDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
         <TicketDetailedChat ticket={ticket} />
       </Grid.Column>
       <Grid.Column width={6}>
-        <TicketDetailedSidebar />
+        <TicketDetailedSidebar attendees={ticket.attendees} />
       </Grid.Column>
     </Grid>
   );

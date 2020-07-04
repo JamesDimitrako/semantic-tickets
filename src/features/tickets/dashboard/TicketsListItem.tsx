@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ITicket } from "../../../app/models/ticket";
 import { format } from "date-fns";
 import { RootStoreContext } from "../../../app/stores/rootStore";
+import TicketListItemAttendees from "./TicketListItemAttendees";
 
 const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
   const rootStore = useContext(RootStoreContext);
@@ -38,7 +39,9 @@ const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
           <Label.Detail>{format(ticket.dateDeadline, "h:mm a")}</Label.Detail>
         </Label>
       </Segment>
-      <Segment secondary>Followers will go here</Segment>
+      <Segment secondary>
+        <TicketListItemAttendees attendees={ticket.attendees} />
+      </Segment>
       <Segment clearing>
         <span>{ticket.description}</span>
         <Button

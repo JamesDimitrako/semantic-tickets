@@ -7,6 +7,7 @@ export interface ITicket {
   dateFirst: Date;
   dateModified: Date;
   dateDeadline: Date;
+  attendees: IAttendee[];
 }
 
 export interface ITicketFormValues extends Partial<ITicket> {
@@ -31,4 +32,11 @@ export class TicketFormValues implements ITicketFormValues {
 
     Object.assign(this, init);
   }
+}
+
+export interface IAttendee {
+  username: string;
+  displayName: string;
+  image: string;
+  isHost: boolean;
 }
