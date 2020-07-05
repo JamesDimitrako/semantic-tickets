@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Segment, Item, Header, Button, Image } from "semantic-ui-react";
 import { ITicket } from "../../../app/models/ticket";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const ticketImageStyle = {
   filter: "brightness(30%)",
@@ -24,6 +25,8 @@ const manageTicketStyle = {
 };
 
 const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
+  const rootStore = useContext(RootStoreContext);
+  const { attendTicket, cancelAttendance, loading } = rootStore.ticketStore;
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -57,9 +60,13 @@ const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
             Manage Ticket
           </Button>
         ) : ticket.participating ? (
-          <Button>Cancel attendance</Button>
+          <Button loading={loading} onClick={cancelAttendance}>
+            Cancel attendance
+          </Button>
         ) : (
-          <Button color="teal">Join Ticket</Button>
+          <Button loading={loading} color="teal" onClick={attendTicket}>
+            Join Ticket
+          </Button>
         )}
       </Segment>
     </Segment.Group>

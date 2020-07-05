@@ -5,7 +5,7 @@ import agent from "../api/agent";
 import { history } from "../..";
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
-import { setTicketProps } from "../common/util/util";
+import { setTicketProps, createAttendee } from "../common/util/util";
 
 export default class TicketStore {
   rootStore: RootStore;
@@ -18,6 +18,7 @@ export default class TicketStore {
   @observable loadingInitial = false;
   @observable submitting = false;
   @observable target = "";
+  @observable loading = false;
 
   @computed get ticketsByDate() {
     return this.groupTicketsByDate(Array.from(this.ticketRegistry.values()));
@@ -93,6 +94,12 @@ export default class TicketStore {
     this.submitting = true;
     try {
       await agent.Tickets.create(ticket);
+      const attendee = createAttendee(this.rootStore.userStore.user!);
+      attendee.isHost = true;
+      let attendees = [];
+      attendees.push(attendee);
+      ticket.attendees = attendees;
+      ticket.isHost = true;
       runInAction("create ticket", () => {
         this.ticketRegistry.set(ticket.id, ticket);
         this.submitting = false;
@@ -143,6 +150,49 @@ export default class TicketStore {
         this.target = "";
       });
       console.log(error);
+    }
+  };
+
+  @action attendTicket = async () => {
+    const attendee = createAttendee(this.rootStore.userStore.user!);
+    this.loading = true;
+    try {
+      await agent.Tickets.attend(this.ticket!.id);
+      runInAction(() => {
+        if (this.ticket) {
+          this.ticket.attendees.push(attendee);
+          this.ticket.participating = true;
+          this.ticketRegistry.set(this.ticket.id, this.ticket);
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loading = false;
+      });
+      toast.error("Problem signing up to ticket");
+    }
+  };
+
+  @action cancelAttendance = async () => {
+    this.loading = true;
+    try {
+      await agent.Tickets.unattend(this.ticket!.id);
+      runInAction(() => {
+        if (this.ticket) {
+          this.ticket.attendees = this.ticket.attendees.filter(
+            (a) => a.username !== this.rootStore.userStore.user!.username
+          );
+          this.ticket.participating = false;
+          this.ticketRegistry.set(this.ticket.id, this.ticket);
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loading = false;
+      });
+      toast.error("Problem cancelling attendance");
     }
   };
 }

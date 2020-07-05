@@ -61,6 +61,8 @@ const Tickets = {
   update: (ticket: ITicket) => requests.put(`/tickets/${ticket.id}`, ticket),
   create: (ticket: ITicket) => requests.post(`/tickets`, ticket),
   delete: (id: string) => requests.delete(`/tickets/${id}`),
+  attend: (id: string) => requests.post(`/tickets/${id}/attend`, {}),
+  unattend: (id: string) => requests.delete(`/tickets/${id}/attend`),
 };
 
 const User = {

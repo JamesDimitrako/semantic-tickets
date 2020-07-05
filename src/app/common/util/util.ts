@@ -1,4 +1,4 @@
-import { ITicket } from "../../models/ticket";
+import { ITicket, IAttendee } from "../../models/ticket";
 import { IUser } from "../../models/user";
 
 export const combineDateAndTime = (date: Date, time: Date) => {
@@ -23,4 +23,13 @@ export const setTicketProps = (ticket: ITicket, user: IUser) => {
     (a) => a.username === user.username && a.isHost
   );
   return ticket;
+};
+
+export const createAttendee = (user: IUser): IAttendee => {
+  return {
+    displayName: user.displayName,
+    isHost: false,
+    username: user.username,
+    image: user.image!,
+  };
 };
