@@ -40,7 +40,9 @@ export default class TicketStore {
       .catch((error) => console.log("Error establishing connection:", error));
 
     this.hubConnection.on("ReceiveComment", (comment) => {
-      this.ticket!.comments.push(comment);
+      runInAction(() => {
+        this.ticket!.comments.push(comment);
+      });
     });
   };
 
