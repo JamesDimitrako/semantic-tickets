@@ -26,7 +26,7 @@ export default class TicketStore {
   @observable loading = false;
   @observable.ref hubConnection: HubConnection | null = null;
 
-  @action createHubConnection = () => {
+  @action createHubConnection = (ticketId: string) => {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl("http://localhost:5000/chat", {
         accessTokenFactory: () => this.rootStore.commonStore.token!,
@@ -37,6 +37,10 @@ export default class TicketStore {
     this.hubConnection
       .start()
       .then(() => console.log(this.hubConnection!.state))
+      .then(() => {
+        console.log("Attempting to join group");
+        this.hubConnection!.invoke("AddToGroup", ticketId);
+      })
       .catch((error) => console.log("Error establishing connection:", error));
 
     this.hubConnection.on("ReceiveComment", (comment) => {
@@ -44,10 +48,19 @@ export default class TicketStore {
         this.ticket!.comments.push(comment);
       });
     });
+
+    this.hubConnection.on("Send", (message) => {
+      toast.info(message);
+    });
   };
 
   @action stopHubConnection = () => {
-    this.hubConnection!.stop();
+    this.hubConnection!.invoke("RemoveFromGroup", this.ticket!.id)
+      .then(() => {
+        this.hubConnection!.stop();
+      })
+      .then(() => console.log("Connection stopped"))
+      .catch((error) => console.log(error));
   };
 
   @action addComment = async (values: any) => {
@@ -138,6 +151,7 @@ export default class TicketStore {
       let attendees = [];
       attendees.push(attendee);
       ticket.attendees = attendees;
+      ticket.comments = [];
       ticket.isHost = true;
       runInAction("create ticket", () => {
         this.ticketRegistry.set(ticket.id, ticket);
