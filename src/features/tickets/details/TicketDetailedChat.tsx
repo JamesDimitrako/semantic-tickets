@@ -1,8 +1,23 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { ITicket } from "../../../app/models/ticket";
 import { Segment, Header, Form, Button, Comment } from "semantic-ui-react";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 const TicketDetailedChat: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
+  const rootStore = useContext(RootStoreContext);
+  const {
+    createHubConnection,
+    stopHubConnection,
+    addComment,
+  } = rootStore.ticketStore;
+
+  useEffect(() => {
+    createHubConnection();
+    return () => {
+      stopHubConnection();
+    };
+  }, [createHubConnection, stopHubConnection]);
+
   return (
     <Fragment>
       <Segment

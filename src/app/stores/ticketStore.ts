@@ -48,6 +48,15 @@ export default class TicketStore {
     this.hubConnection!.stop();
   };
 
+  @action addComment = async (values: any) => {
+    values.ticketId = this.ticket!.id;
+    try {
+      await this.hubConnection!.invoke("SendComment", values);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   @computed get ticketsByDate() {
     return this.groupTicketsByDate(Array.from(this.ticketRegistry.values()));
   }
