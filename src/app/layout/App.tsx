@@ -14,10 +14,10 @@ import TicketForm from "../../features/tickets/form/TicketForm";
 import TicketDetails from "../../features/tickets/details/TicketDetails";
 import NotFound from "./NotFound";
 import { ToastContainer } from "react-toastify";
-import LoginForm from "../../features/user/LoginForm";
 import { RootStoreContext } from "../stores/rootStore";
 import LoadingComponent from "./LoadingComponent";
 import ModalContainer from "../common/modals/ModalContainer";
+import ProfilePage from "../../features/profiles/ProfilePage";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const rootStore = useContext(RootStoreContext);
@@ -53,7 +53,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={["/createTicket", "/manage/:id"]}
                   component={TicketForm}
                 />
-                <Route path="/login" component={LoginForm} />
+                <Route path="/profile/:username" component={ProfilePage} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

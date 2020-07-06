@@ -19,13 +19,19 @@ const TicketsListItem: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
               size="tiny"
               circular
               src={host.image || "/assets/user.png"}
+              style={{ marginBottom: 3 }}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/tickets/${ticket.id}`}>
                 {ticket.title}
               </Item.Header>
               <Item.Description>
-                <div>Hosted by {host.displayName}</div>
+                <div>
+                  Hosted by
+                  <Link to={`/profile/${host.username}`}>
+                    {host.displayName}
+                  </Link>
+                </div>
                 <Label basic content="Category" />
               </Item.Description>
               {ticket.isHost && (

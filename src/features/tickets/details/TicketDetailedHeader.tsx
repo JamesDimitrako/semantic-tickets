@@ -27,6 +27,7 @@ const manageTicketStyle = {
 const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
   const rootStore = useContext(RootStoreContext);
   const { attendTicket, cancelAttendance, loading } = rootStore.ticketStore;
+  const host = ticket.attendees.filter((x) => x.isHost)[0];
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -42,7 +43,10 @@ const TicketDetailedHeader: React.FC<{ ticket: ITicket }> = ({ ticket }) => {
                 />
                 <p>{format(ticket.dateFirst, "eeee do MMMM")}</p>
                 <p>
-                  Hosted by <strong>Bob</strong>
+                  Hosted by{" "}
+                  <Link to={`/profile/${host.username}`}>
+                    <strong>{host.displayName}</strong>
+                  </Link>
                 </p>
               </Item.Content>
             </Item>
