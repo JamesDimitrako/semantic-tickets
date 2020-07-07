@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Grid, Loader } from "semantic-ui-react";
 import TicketList from "./TicketList";
 import { observer } from "mobx-react-lite";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import InfiniteScroll from "react-infinite-scroller";
 import TicketFilters from "./TicketFilters";
+import TicketListItemPlaceholder from "./TicketListItemPlaceholder";
 
 const TicketDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
@@ -28,20 +28,21 @@ const TicketDashboard: React.FC = () => {
     loadTickets();
   }, [loadTickets]);
 
-  if (loadingInitial && page === 0)
-    return <LoadingComponent content="Loading" />;
-
   return (
     <Grid>
       <Grid.Column width={10}>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={handleGetNext}
-          hasMore={!loadingNext && page + 1 < totalPages}
-          initialLoad={false}
-        >
-          <TicketList />
-        </InfiniteScroll>
+        {loadingInitial && page === 0 ? (
+          <TicketListItemPlaceholder />
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={handleGetNext}
+            hasMore={!loadingNext && page + 1 < totalPages}
+            initialLoad={false}
+          >
+            <TicketList />
+          </InfiniteScroll>
+        )}
       </Grid.Column>
       <Grid.Column width={6}>
         <TicketFilters />
