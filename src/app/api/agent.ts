@@ -66,8 +66,8 @@ const requests = {
 };
 
 const Tickets = {
-  list: (limit?: number, page?: number): Promise<ITicketsEnvelope> =>
-    requests.get(`/tickets?limit=${limit}&offset=${page ? page * limit! : 0}`),
+  list: (params: URLSearchParams): Promise<ITicketsEnvelope> =>
+    axios.get("/tickets", { params: params }).then(responseBody),
   details: (id: string) => requests.get(`/tickets/${id}`),
   update: (ticket: ITicket) => requests.put(`/tickets/${ticket.id}`, ticket),
   create: (ticket: ITicket) => requests.post(`/tickets`, ticket),

@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import InfiniteScroll from "react-infinite-scroller";
+import TicketFilters from "./TicketFilters";
 
 const TicketDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
@@ -43,7 +44,7 @@ const TicketDashboard: React.FC = () => {
         </InfiniteScroll>
       </Grid.Column>
       <Grid.Column width={6}>
-        <h2>Filters</h2>
+        <TicketFilters />
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={loadingNext} />
