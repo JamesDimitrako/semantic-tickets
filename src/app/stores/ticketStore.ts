@@ -12,6 +12,8 @@ import {
   LogLevel,
 } from "@microsoft/signalr";
 
+const LIMIT = 2;
+
 export default class TicketStore {
   rootStore: RootStore;
   constructor(rootStore: RootStore) {
@@ -25,6 +27,16 @@ export default class TicketStore {
   @observable target = "";
   @observable loading = false;
   @observable.ref hubConnection: HubConnection | null = null;
+  @observable ticketCount = 0;
+  @observable page = 0;
+
+  @computed get TotalPages() {
+    return Math.ceil(this.ticketCount / LIMIT);
+  }
+
+  @action setPage = (page: number) => {
+    this.page = page;
+  };
 
   @action createHubConnection = (ticketId: string) => {
     this.hubConnection = new HubConnectionBuilder()
@@ -94,12 +106,14 @@ export default class TicketStore {
   @action loadTickets = async () => {
     this.loadingInitial = true;
     try {
-      const tickets = await agent.Tickets.list();
+      const ticketsEnvelope = await agent.Tickets.list(LIMIT, this.page);
+      const { tickets, ticketCount } = ticketsEnvelope;
       runInAction("loading tickets", () => {
         tickets.forEach((ticket) => {
           setTicketProps(ticket, this.rootStore.userStore.user!);
           this.ticketRegistry.set(ticket.id, ticket);
         });
+        this.ticketCount = ticketCount;
         this.loadingInitial = false;
       });
     } catch (error) {

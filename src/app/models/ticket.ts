@@ -1,3 +1,8 @@
+export interface ITicketsEnvelope {
+  tickets: ITicket[];
+  ticketCount: number;
+}
+
 export interface ITicket {
   id: string;
   title: string;

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { ITicket } from "../models/ticket";
+import { ITicket, ITicketsEnvelope } from "../models/ticket";
 import { history } from "../..";
 import { toast } from "react-toastify";
 import { IUser, IUserFormValues } from "../models/user";
@@ -66,7 +66,8 @@ const requests = {
 };
 
 const Tickets = {
-  list: (): Promise<ITicket[]> => requests.get("/tickets"),
+  list: (limit?: number, page?: number): Promise<ITicketsEnvelope> =>
+    requests.get(`/tickets?limit=${limit}&offset=${page ? page * limit! : 0}`),
   details: (id: string) => requests.get(`/tickets/${id}`),
   update: (ticket: ITicket) => requests.put(`/tickets/${ticket.id}`, ticket),
   create: (ticket: ITicket) => requests.post(`/tickets`, ticket),
