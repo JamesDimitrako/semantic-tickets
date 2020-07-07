@@ -2,10 +2,11 @@ import React from "react";
 import { Tab } from "semantic-ui-react";
 import ProfilePhotos from "./ProfilePhotos";
 import ProfileFollowings from "./ProfileFollowings";
+import ProfileTickets from "./ProfileTickets";
 
 const panes = [
   { menuItem: "Photos", render: () => <ProfilePhotos /> },
-  { menuItem: "Tickets", render: () => <Tab.Pane>Tickets content</Tab.Pane> },
+  { menuItem: "Tickets", render: () => <ProfileTickets /> },
 
   {
     menuItem: "Following",
