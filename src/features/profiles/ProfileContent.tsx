@@ -4,25 +4,30 @@ import ProfilePhotos from "./ProfilePhotos";
 import ProfileFollowings from "./ProfileFollowings";
 
 const panes = [
-  { menuItem: "About", render: () => <Tab.Pane>About content</Tab.Pane> },
   { menuItem: "Photos", render: () => <ProfilePhotos /> },
   { menuItem: "Tickets", render: () => <Tab.Pane>Tickets content</Tab.Pane> },
-  {
-    menuItem: "Followers",
-    render: () => <ProfileFollowings />,
-  },
+
   {
     menuItem: "Following",
     render: () => <ProfileFollowings />,
   },
+  {
+    menuItem: "Followers",
+    render: () => <ProfileFollowings />,
+  },
 ];
 
-const ProfileContent = () => {
+interface IProps {
+  setActiveTab: (activeIndex: any) => void;
+}
+
+const ProfileContent: React.FC<IProps> = ({ setActiveTab }) => {
   return (
     <Tab
       menu={{ fluid: true, vertical: true }}
       menuPosition="right"
       panes={panes}
+      onTabChange={(e, data) => setActiveTab(data.activeIndex)}
       // activeIndex={1}
     />
   );
