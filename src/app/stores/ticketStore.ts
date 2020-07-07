@@ -30,7 +30,7 @@ export default class TicketStore {
   @observable ticketCount = 0;
   @observable page = 0;
 
-  @computed get TotalPages() {
+  @computed get totalPages() {
     return Math.ceil(this.ticketCount / LIMIT);
   }
 
